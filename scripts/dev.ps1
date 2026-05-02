@@ -1,2 +1,4 @@
-Write-Host "DevTrail development script placeholder"
-Write-Host "Frontend and backend setup will be added in later steps."
+$ErrorActionPreference = "Stop"
+
+Write-Host "Starting DevTrail backend..."
+npm run dev:backend
