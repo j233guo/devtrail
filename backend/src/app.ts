@@ -4,6 +4,7 @@ import Fastify from "fastify";
 import { env } from "./config/env.js";
 import { dbHealthRoutes } from "./modules/db-health/db-health.routes.js";
 import { healthRoutes } from "./modules/health/health.routes.js";
+import { projectsRoutes } from "./modules/projects/projects.routes.js";
 
 export function buildApp() {
   const app = Fastify({
@@ -16,6 +17,7 @@ export function buildApp() {
 
   void app.register(healthRoutes);
   void app.register(dbHealthRoutes);
+  void app.register(projectsRoutes);
 
   return app;
 }
