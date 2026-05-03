@@ -10,16 +10,19 @@
     "build": "tsc -p tsconfig.json",
     "start": "node dist/server.js",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "db:migrate": "tsx src/db/migrate.ts",
     "clean": "rimraf dist",
     "test": "npm run typecheck",
     "lint": "npm run typecheck"
   },
   "dependencies": {
     "@fastify/cors": "^11.0.0",
+    "better-sqlite3": "^12.9.0",
     "dotenv": "^16.4.7",
     "fastify": "^5.0.0"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^22.0.0",
     "rimraf": "^6.0.1",
     "tsx": "^4.19.0",
