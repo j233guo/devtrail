@@ -6,10 +6,14 @@ $backendResponse = Invoke-RestMethod `
   -Uri "http://localhost:3000/api/health" `
   -Method GET
 
-$backendResponse | ConvertTo-Json
+$backendResponse | ConvertTo-Json -Depth 5
 
-if ($backendResponse.status -ne "ok") {
-  throw "Backend health check failed. Expected status=ok."
+if ($backendResponse.code -ne "OK") {
+  throw "Backend health check failed. Expected code=OK."
+}
+
+if ($backendResponse.data.status -ne "ok") {
+  throw "Backend health check failed. Expected data.status=ok."
 }
 
 Write-Host "Backend health check passed."
@@ -20,14 +24,18 @@ $dbResponse = Invoke-RestMethod `
   -Uri "http://localhost:3000/api/db/health" `
   -Method GET
 
-$dbResponse | ConvertTo-Json
+$dbResponse | ConvertTo-Json -Depth 5
 
-if ($dbResponse.status -ne "ok") {
-  throw "Database health check failed. Expected status=ok."
+if ($dbResponse.code -ne "OK") {
+  throw "Database health check failed. Expected code=OK."
 }
 
-if ($dbResponse.database -ne "sqlite") {
-  throw "Database health check failed. Expected database=sqlite."
+if ($dbResponse.data.status -ne "ok") {
+  throw "Database health check failed. Expected data.status=ok."
+}
+
+if ($dbResponse.data.database -ne "sqlite") {
+  throw "Database health check failed. Expected data.database=sqlite."
 }
 
 Write-Host "Database health check passed."
@@ -38,10 +46,14 @@ $proxyResponse = Invoke-RestMethod `
   -Uri "http://localhost:4200/api/health" `
   -Method GET
 
-$proxyResponse | ConvertTo-Json
+$proxyResponse | ConvertTo-Json -Depth 5
 
-if ($proxyResponse.status -ne "ok") {
-  throw "Frontend proxy health check failed. Expected status=ok."
+if ($proxyResponse.code -ne "OK") {
+  throw "Frontend proxy health check failed. Expected code=OK."
+}
+
+if ($proxyResponse.data.status -ne "ok") {
+  throw "Frontend proxy health check failed. Expected data.status=ok."
 }
 
 Write-Host "Frontend proxy health check passed."

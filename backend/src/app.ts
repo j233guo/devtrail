@@ -2,7 +2,8 @@ import cors from "@fastify/cors";
 import Fastify from "fastify";
 
 import { env } from "./config/env.js";
-import { getDb } from "./db/connection.js";
+import { dbHealthRoutes } from "./modules/db-health/db-health.routes.js";
+import { healthRoutes } from "./modules/health/health.routes.js";
 
 export function buildApp() {
   const app = Fastify({
@@ -13,19 +14,8 @@ export function buildApp() {
     origin: env.FRONTEND_ORIGIN,
   });
 
-  app.get("/api/health", async () => ({
-    status: "ok",
-    service: "devtrail-backend",
-  }));
-
-  app.get("/api/db/health", async () => {
-    getDb().prepare("SELECT 1 AS ok").get();
-
-    return {
-      status: "ok",
-      database: "sqlite",
-    };
-  });
+  void app.register(healthRoutes);
+  void app.register(dbHealthRoutes);
 
   return app;
 }

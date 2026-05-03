@@ -1,0 +1,27 @@
+<article class="status-panel" aria-live="polite">
+  <div class="panel-header">
+    <span
+      class="status-dot"
+      [class.status-dot--ok]="status()"
+      [class.status-dot--error]="error()"
+    ></span>
+    <h2>{{ title() }}</h2>
+  </div>
+
+  @if (isLoading()) {
+    <p class="status-message">Checking status...</p>
+  } @else if (error()) {
+    <p class="status-message status-message--error">{{ error() }}</p>
+  } @else {
+    <dl class="status-list">
+      <div>
+        <dt>Status</dt>
+        <dd>{{ status() ?? 'unknown' }}</dd>
+      </div>
+      <div>
+        <dt>{{ label() }}</dt>
+        <dd>{{ value() ?? 'unknown' }}</dd>
+      </div>
+    </dl>
+  }
+</article>

@@ -1,0 +1,27 @@
+<main class="page-shell">
+  <section class="hero" aria-labelledby="app-title">
+    <p class="eyebrow">Local workspace</p>
+    <h1 id="app-title">DevTrail</h1>
+    <p class="subtitle">Local-first AI development workspace</p>
+
+    <div class="status-grid">
+      <app-backend-status-card
+        title="Backend status"
+        [isLoading]="isBackendLoading()"
+        [error]="backendError()"
+        [status]="backendHealth()?.status ?? null"
+        label="Backend service"
+        [value]="backendHealth()?.service ?? null"
+      />
+
+      <app-backend-status-card
+        title="Database status"
+        [isLoading]="isDatabaseLoading()"
+        [error]="databaseError()"
+        [status]="dbHealth()?.status ?? null"
+        label="Database type"
+        [value]="dbHealth()?.database ?? null"
+      />
+    </div>
+  </section>
+</main>
