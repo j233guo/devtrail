@@ -1,12 +1,17 @@
+<#
+  Script name: test-api.ps1
+  Purpose: Validate backend, database, frontend proxy, and Projects API health.
+  Usage: pwsh ./scripts/test-api.ps1
+#>
+
 $ErrorActionPreference = "Stop"
 
+# Health checks
 Write-Host "Testing DevTrail backend health endpoint..."
 
 $backendResponse = Invoke-RestMethod `
   -Uri "http://localhost:3000/api/health" `
   -Method GET
-
-$backendResponse | ConvertTo-Json -Depth 5
 
 if ($backendResponse.code -ne "OK") {
   throw "Backend health check failed. Expected code=OK."
@@ -18,13 +23,12 @@ if ($backendResponse.data.status -ne "ok") {
 
 Write-Host "Backend health check passed."
 
+# Database health checks
 Write-Host "Testing DevTrail database health endpoint..."
 
 $dbResponse = Invoke-RestMethod `
   -Uri "http://localhost:3000/api/db/health" `
   -Method GET
-
-$dbResponse | ConvertTo-Json -Depth 5
 
 if ($dbResponse.code -ne "OK") {
   throw "Database health check failed. Expected code=OK."
@@ -40,13 +44,12 @@ if ($dbResponse.data.database -ne "sqlite") {
 
 Write-Host "Database health check passed."
 
+# Frontend proxy health checks
 Write-Host "Testing Angular dev proxy health endpoint..."
 
 $proxyResponse = Invoke-RestMethod `
   -Uri "http://localhost:4200/api/health" `
   -Method GET
-
-$proxyResponse | ConvertTo-Json -Depth 5
 
 if ($proxyResponse.code -ne "OK") {
   throw "Frontend proxy health check failed. Expected code=OK."
@@ -58,6 +61,7 @@ if ($proxyResponse.data.status -ne "ok") {
 
 Write-Host "Frontend proxy health check passed."
 
+# Projects API checks
 Write-Host "Testing Projects API..."
 
 $projectPayload = @{
@@ -73,8 +77,6 @@ $createdProjectResponse = Invoke-RestMethod `
   -ContentType "application/json" `
   -Body $projectPayload
 
-$createdProjectResponse | ConvertTo-Json -Depth 10
-
 if ($createdProjectResponse.code -ne "CREATED") {
   throw "Project create failed. Expected code=CREATED."
 }
@@ -88,6 +90,7 @@ if ($createdProjectResponse.data.tech_stack.Count -lt 3) {
 }
 
 $projectId = $createdProjectResponse.data.id
+Write-Host "Project create check passed."
 
 $loadedProjectResponse = Invoke-RestMethod `
   -Uri "http://localhost:3000/api/projects/$projectId" `
@@ -97,10 +100,12 @@ if ($loadedProjectResponse.code -ne "OK") {
   throw "Project load failed. Expected code=OK."
 }
 
+Write-Host "Project load check passed."
+
 $updatedProjectPayload = @{
   name = "DevTrail API Test Updated"
   description = "Temporary project updated by scripts/test-api.ps1."
-  tech_stack = @("Angular", "Fastify", "SQLite", "DeepSeek")
+  tech_stack = @("Angular", "Fastify", "SQLite", "TypeScript")
   status = "active"
 } | ConvertTo-Json -Depth 10
 
@@ -118,6 +123,8 @@ if ($updatedProjectResponse.data.tech_stack.Count -lt 4) {
   throw "Project update failed. Expected updated tech_stack array."
 }
 
+Write-Host "Project update check passed."
+
 $deletedProjectResponse = Invoke-RestMethod `
   -Uri "http://localhost:3000/api/projects/$projectId" `
   -Method DELETE
@@ -130,4 +137,8 @@ if ($deletedProjectResponse.data.deleted -ne $true) {
   throw "Project delete failed. Expected deleted=true."
 }
 
+Write-Host "Project delete check passed."
 Write-Host "Projects API test passed."
+
+
+Write-Host "All API checks passed."
