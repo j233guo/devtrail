@@ -1,0 +1,247 @@
+/* Styles the floating rounded sidebar card. */
+.sidebar {
+  position: sticky;
+  top: var(--space-lg);
+  min-height: calc(100dvh - (var(--space-lg) * 2));
+  width: 100%;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: var(--space-lg);
+  padding: var(--space-md);
+  overflow: hidden;
+  transition:
+    width 180ms ease,
+    padding 180ms ease;
+}
+
+.sidebar--collapsed {
+  padding: var(--space-sm);
+}
+
+.sidebar-top,
+.sidebar-bottom {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.sidebar-top {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.sidebar--collapsed .sidebar-top {
+  grid-template-columns: 1fr;
+  justify-items: center;
+}
+
+.brand {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.brand-mark,
+.nav-icon {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  display: inline-grid;
+  place-items: center;
+  color: var(--color-bg);
+  background: var(--color-primary);
+  border-radius: var(--radius-md);
+  font-weight: 800;
+}
+
+.brand-copy {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.brand-copy strong,
+.brand-copy span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.brand-copy span {
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+}
+
+.icon-button {
+  width: 34px;
+  height: 34px;
+  display: inline-grid;
+  place-items: center;
+  color: var(--color-text);
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+/* Organizes primary navigation and compact collapsed labels. */
+.sidebar-nav {
+  min-height: 0;
+  display: grid;
+  align-content: start;
+  gap: var(--space-sm);
+  overflow: hidden auto;
+}
+
+.nav-item {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs);
+  color: var(--color-text-muted);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.nav-item--active,
+.nav-item:hover {
+  color: var(--color-text);
+  background: var(--color-surface-elevated);
+}
+
+.nav-item--button {
+  width: 100%;
+  font: inherit;
+}
+
+.sidebar--collapsed .nav-item {
+  justify-content: center;
+}
+
+.chevron {
+  margin-left: auto;
+  color: var(--color-text-muted);
+  transition: transform 180ms ease;
+}
+
+.chevron--open {
+  transform: rotate(180deg);
+}
+
+/* Animates the temporary Projects preview section. */
+.projects-section {
+  display: grid;
+  gap: var(--space-xs);
+}
+
+.projects-content {
+  max-height: 220px;
+  display: grid;
+  gap: var(--space-xs);
+  padding-left: 46px;
+  overflow: hidden;
+  opacity: 1;
+  transition:
+    max-height 180ms ease,
+    opacity 180ms ease;
+}
+
+.projects-section--collapsed .projects-content {
+  max-height: 0;
+  opacity: 0;
+}
+
+.project-link {
+  display: grid;
+  gap: 2px;
+  padding: var(--space-xs) var(--space-sm);
+  color: var(--color-text-muted);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+}
+
+.project-link--all,
+.project-link:hover {
+  color: var(--color-text);
+  background: var(--color-surface-elevated);
+}
+
+.project-link span,
+.project-link small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Presents compact server health in the sidebar footer. */
+.health-panel {
+  display: grid;
+  gap: var(--space-xs);
+  padding: var(--space-sm);
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.sidebar--collapsed .health-panel {
+  justify-items: center;
+}
+
+.health-panel h2 {
+  margin: 0 0 var(--space-xs);
+  color: var(--color-text);
+  font-size: 0.86rem;
+}
+
+.health-message {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.86rem;
+}
+
+.health-message--error {
+  color: var(--color-danger);
+}
+
+.health-row {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-text-muted);
+  font-size: 0.84rem;
+}
+
+.health-row strong {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.health-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-xl);
+  background: var(--color-primary);
+}
+
+@media (max-width: 860px) {
+  .sidebar {
+    position: static;
+    min-height: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar,
+  .chevron,
+  .projects-content {
+    transition: none;
+  }
+}

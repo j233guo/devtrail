@@ -1,0 +1,31 @@
+/* Centers the Settings placeholder inside the new app shell. */
+.placeholder-page {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.placeholder-card {
+  padding: var(--space-xl);
+}
+
+.eyebrow {
+  margin: 0 0 var(--space-sm);
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: clamp(1.7rem, 4vw, 2.5rem);
+}
+
+p {
+  max-width: 36rem;
+  margin: var(--space-md) 0 0;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}

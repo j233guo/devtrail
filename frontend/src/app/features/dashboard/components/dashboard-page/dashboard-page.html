@@ -1,27 +1,19 @@
-<main class="page-shell">
-  <section class="hero" aria-labelledby="app-title">
+<section class="dashboard-grid">
+  <article class="dt-card welcome-card">
     <p class="eyebrow">Local workspace</p>
-    <h1 id="app-title" class="page-title">DevTrail</h1>
-    <p class="page-subtitle subtitle">Local-first AI development workspace</p>
+    <h2>Welcome to DevTrail</h2>
+    <p>
+      A focused place for local-first project planning, task flow, and development context.
+    </p>
+  </article>
 
-    <div class="status-grid">
-      <app-backend-status-card
-        title="Backend status"
-        [isLoading]="isBackendLoading()"
-        [error]="backendError()"
-        [status]="backendHealth()?.status ?? null"
-        label="Backend service"
-        [value]="backendHealth()?.service ?? null"
-      />
-
-      <app-backend-status-card
-        title="Database status"
-        [isLoading]="isDatabaseLoading()"
-        [error]="databaseError()"
-        [status]="dbHealth()?.status ?? null"
-        label="Database type"
-        [value]="dbHealth()?.database ?? null"
-      />
-    </div>
-  </section>
-</main>
+  <div class="metric-grid">
+    @for (metric of metrics(); track metric.label) {
+      <article class="dt-card metric-card">
+        <span>{{ metric.label }}</span>
+        <strong>{{ metric.value }}</strong>
+        <p>{{ metric.description }}</p>
+      </article>
+    }
+  </div>
+</section>

@@ -1,0 +1,12 @@
+<header class="navbar">
+  <div>
+    <h1>{{ pageDisplay().title }}</h1>
+    <p>{{ pageDisplay().subtitle }}</p>
+  </div>
+
+  <div class="navbar-actions">
+    @if (pageDisplay().showProjectAction) {
+      <button class="dt-button dt-button-primary" type="button">New Project</button>
+    }
+  </div>
+</header>

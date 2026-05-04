@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 
-import { DashboardPage } from './features/dashboard/components/dashboard-page/dashboard-page';
+import { AppShellComponent } from './layout/app-shell/app-shell';
 
 @Component({
   selector: 'app-root',
-  imports: [DashboardPage],
+  imports: [AppShellComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })

@@ -1,23 +1,16 @@
 :host {
   display: block;
-  min-height: 100dvh;
 }
 
-/* Frames the dashboard as the first app workspace surface. */
-.page-shell {
-  min-height: 100dvh;
+/* Lays out dashboard welcome and planning placeholders. */
+.dashboard-grid {
   display: grid;
-  place-items: center;
-  padding: var(--space-xl) var(--space-lg);
-  background:
-    radial-gradient(circle at top left, color-mix(in srgb, var(--color-primary) 12%, transparent), transparent 34rem),
-    var(--color-bg);
+  gap: var(--space-lg);
 }
 
-/* Keeps the dashboard header centered and readable. */
-.hero {
-  width: min(100%, 960px);
-  text-align: center;
+.welcome-card,
+.metric-card {
+  padding: var(--space-xl);
 }
 
 .eyebrow {
@@ -29,21 +22,50 @@
   text-transform: uppercase;
 }
 
-.subtitle {
-  max-width: 32rem;
-  margin: var(--space-md) auto var(--space-xl);
+.welcome-card h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1;
 }
 
-/* Lays out status cards responsively without changing dashboard behavior. */
-.status-grid {
+.welcome-card p,
+.metric-card p {
+  max-width: 42rem;
+  margin: var(--space-md) 0 0;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+/* Keeps dashboard cards responsive for the shell content width. */
+.metric-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 460px));
-  justify-content: center;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--space-lg);
 }
 
-@media (max-width: 820px) {
-  .status-grid {
-    grid-template-columns: minmax(0, 460px);
+.metric-card {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.metric-card span {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.metric-card strong {
+  color: var(--color-text);
+  font-size: 1.6rem;
+}
+
+.metric-card p {
+  margin: 0;
+}
+
+@media (max-width: 960px) {
+  .metric-grid {
+    grid-template-columns: 1fr;
   }
 }
