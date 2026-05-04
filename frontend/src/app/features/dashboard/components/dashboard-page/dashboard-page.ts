@@ -1,9 +1,10 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 
-import { DbHealthService } from '../../../../core/services/db-health.service';
-import { HealthService } from '../../../../core/services/health.service';
-import type { IDbHealthResponse } from '../../models/db-health.model';
-import type { IHealthResponse } from '../../models/health.model';
+import {
+  type IDbHealthResponse,
+  type IHealthResponse,
+  NetworkService,
+} from '../../../../core/network/network.service';
 import { BackendStatusCard } from '../backend-status-card/backend-status-card';
 
 @Component({
@@ -13,8 +14,7 @@ import { BackendStatusCard } from '../backend-status-card/backend-status-card';
   styleUrl: './dashboard-page.css',
 })
 export class DashboardPage implements OnInit {
-  private readonly healthService = inject(HealthService);
-  private readonly dbHealthService = inject(DbHealthService);
+  private readonly networkService = inject(NetworkService);
 
   protected readonly isBackendLoading = signal(true);
   protected readonly isDatabaseLoading = signal(true);
@@ -23,8 +23,9 @@ export class DashboardPage implements OnInit {
   protected readonly backendError = signal<string | null>(null);
   protected readonly databaseError = signal<string | null>(null);
 
+  // Loads health data for the dashboard status cards.
   ngOnInit(): void {
-    this.healthService.getHealth().subscribe({
+    this.networkService.getHealth().subscribe({
       next: (response) => {
         this.backendHealth.set(response.data);
         this.backendError.set(null);
@@ -37,7 +38,7 @@ export class DashboardPage implements OnInit {
       },
     });
 
-    this.dbHealthService.getDbHealth().subscribe({
+    this.networkService.getDbHealth().subscribe({
       next: (response) => {
         this.dbHealth.set(response.data);
         this.databaseError.set(null);
