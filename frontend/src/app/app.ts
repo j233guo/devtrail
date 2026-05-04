@@ -6,6 +6,6 @@ import { DashboardPage } from './features/dashboard/components/dashboard-page/da
   selector: 'app-root',
   imports: [DashboardPage],
   templateUrl: './app.html',
-  styleUrl: './app.css',
+  styleUrl: './app.scss',
 })
 export class App {}

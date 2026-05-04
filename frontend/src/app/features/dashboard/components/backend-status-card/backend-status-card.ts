@@ -3,7 +3,7 @@ import { Component, input } from '@angular/core';
 @Component({
   selector: 'app-backend-status-card',
   templateUrl: './backend-status-card.html',
-  styleUrl: './backend-status-card.css',
+  styleUrl: './backend-status-card.scss',
 })
 export class BackendStatusCard {
   readonly title = input.required<string>();

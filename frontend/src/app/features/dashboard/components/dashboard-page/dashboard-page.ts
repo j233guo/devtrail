@@ -11,7 +11,7 @@ import { BackendStatusCard } from '../backend-status-card/backend-status-card';
   selector: 'app-dashboard-page',
   imports: [BackendStatusCard],
   templateUrl: './dashboard-page.html',
-  styleUrl: './dashboard-page.css',
+  styleUrl: './dashboard-page.scss',
 })
 export class DashboardPage implements OnInit {
   private readonly networkService = inject(NetworkService);

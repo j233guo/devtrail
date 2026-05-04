@@ -1,0 +1,100 @@
+:host {
+  display: block;
+}
+
+/* Styles the reusable dashboard status card surface. */
+.status-panel {
+  width: min(100%, 460px);
+  padding: var(--space-lg);
+  text-align: left;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.panel-header h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 1rem;
+  font-weight: 750;
+}
+
+/* Indicates loading, success, and error state without adding behavior. */
+.status-dot {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 auto;
+  border-radius: var(--radius-xl);
+  background: var(--color-text-muted);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-text-muted) 18%, transparent);
+}
+
+.status-dot--ok {
+  background: var(--color-primary);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary) 18%, transparent);
+}
+
+.status-dot--error {
+  background: var(--color-danger);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-danger) 18%, transparent);
+}
+
+.status-message {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.status-message--error {
+  color: var(--color-danger);
+}
+
+/* Presents compact status metadata inside the card. */
+.status-list {
+  display: grid;
+  gap: var(--space-md);
+  margin: 0;
+}
+
+.status-list div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.status-list div:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+dt {
+  color: var(--color-text-muted);
+  font-size: 0.86rem;
+  font-weight: 650;
+}
+
+dd {
+  margin: 0;
+  color: var(--color-text);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.95rem;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 520px) {
+  .status-panel {
+    padding: var(--space-md);
+  }
+
+  .status-list div {
+    display: grid;
+    gap: var(--space-xs);
+  }
+}
