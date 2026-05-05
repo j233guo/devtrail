@@ -1,0 +1,29 @@
+<article class="dt-card project-card">
+  <header class="project-header">
+    <div>
+      <span class="status-pill">{{ project().status }}</span>
+      <h2>{{ project().name }}</h2>
+    </div>
+
+    <app-dropdown-menu triggerLabel="Actions">
+      <button type="button" (click)="requestEdit()">Edit</button>
+      <button type="button" (click)="requestDelete()">Delete</button>
+    </app-dropdown-menu>
+  </header>
+
+  <p class="project-description">
+    {{ project().description || 'No description yet.' }}
+  </p>
+
+  @if (project().tech_stack.length > 0) {
+    <div class="tech-stack" aria-label="Tech stack">
+      @for (tech of project().tech_stack; track tech) {
+        <span>{{ tech }}</span>
+      }
+    </div>
+  }
+
+  <footer>
+    <span>Updated {{ formatProjectDate(project()) }}</span>
+  </footer>
+</article>

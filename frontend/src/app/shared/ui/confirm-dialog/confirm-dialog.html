@@ -1,0 +1,20 @@
+<app-modal [open]="open()" [title]="title()" (closeRequest)="requestCancel()">
+  <div class="confirm-dialog">
+    <p>{{ message() }}</p>
+
+    <div class="confirm-actions">
+      <button class="dt-button" type="button" (click)="requestCancel()">
+        {{ cancelLabel() }}
+      </button>
+      <button
+        class="dt-button"
+        [class.confirm-danger]="danger()"
+        [class.dt-button-primary]="!danger()"
+        type="button"
+        (click)="requestConfirm()"
+      >
+        {{ confirmLabel() }}
+      </button>
+    </div>
+  </div>
+</app-modal>

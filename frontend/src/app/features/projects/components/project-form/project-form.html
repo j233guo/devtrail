@@ -1,0 +1,52 @@
+<form class="project-form" (submit)="submitForm(); $event.preventDefault()">
+  <label>
+    <span>Name</span>
+    <input
+      type="text"
+      [value]="name()"
+      (input)="updateName($event)"
+      placeholder="Project name"
+      autocomplete="off"
+    />
+    @if (wasSubmitted() && !name().trim()) {
+      <small>Name is required.</small>
+    }
+  </label>
+
+  <label>
+    <span>Description</span>
+    <textarea
+      rows="4"
+      [value]="description()"
+      (input)="updateDescription($event)"
+      placeholder="What is this project for?"
+    ></textarea>
+  </label>
+
+  <label>
+    <span>Tech stack</span>
+    <input
+      type="text"
+      [value]="techStackText()"
+      (input)="updateTechStack($event)"
+      placeholder="Angular, Fastify, SQLite"
+    />
+  </label>
+
+  <label>
+    <span>Status</span>
+    <select [value]="status()" (change)="updateStatus($event)">
+      @for (option of statusOptions; track option.value) {
+        <option [value]="option.value">{{ option.label }}</option>
+      }
+    </select>
+    @if (wasSubmitted() && !status().trim()) {
+      <small>Status is required.</small>
+    }
+  </label>
+
+  <div class="form-actions">
+    <button class="dt-button" type="button" (click)="cancelForm()">Cancel</button>
+    <button class="dt-button dt-button-primary" type="submit">{{ submitLabel() }}</button>
+  </div>
+</form>

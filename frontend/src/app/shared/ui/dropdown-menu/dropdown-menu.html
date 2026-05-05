@@ -1,0 +1,11 @@
+<div class="dropdown">
+  <button class="dropdown-trigger" type="button" (click)="toggleMenu()">
+    {{ triggerLabel() }}
+  </button>
+
+  @if (isOpen()) {
+    <div class="dropdown-panel" (click)="closeMenu()">
+      <ng-content />
+    </div>
+  }
+</div>

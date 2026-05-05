@@ -1,31 +1,75 @@
-/* Centers the Projects placeholder inside the new app shell. */
-.placeholder-page {
+/* Lays out the Projects list page without adding a detail view yet. */
+.projects-page {
   display: grid;
   gap: var(--space-lg);
 }
 
-.placeholder-card {
-  padding: var(--space-xl);
+.projects-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
 }
 
-.eyebrow {
-  margin: 0 0 var(--space-sm);
-  color: var(--color-text-muted);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+.toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-sm);
 }
 
-h2 {
+.inline-error {
   margin: 0;
-  color: var(--color-text);
-  font-size: clamp(1.7rem, 4vw, 2.5rem);
+  padding: var(--space-sm) var(--space-md);
+  color: var(--color-danger);
+  background: color-mix(in srgb, var(--color-danger) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-danger) 28%, transparent);
+  border-radius: var(--radius-md);
 }
 
-p {
-  max-width: 36rem;
-  margin: var(--space-md) 0 0;
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-lg);
+}
+
+.empty-state {
+  min-height: 280px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  justify-items: center;
+  gap: var(--space-md);
+  padding: var(--space-xl);
+  text-align: center;
+}
+
+.empty-state h2,
+.empty-state p {
+  margin: 0;
+}
+
+.empty-state h2 {
+  color: var(--color-text);
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+}
+
+.empty-state p {
   color: var(--color-text-muted);
   line-height: 1.6;
+}
+
+@media (max-width: 680px) {
+  .projects-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .toolbar-actions {
+    justify-content: stretch;
+  }
+
+  .toolbar-actions .dt-button {
+    flex: 1;
+  }
 }

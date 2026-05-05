@@ -1,7 +1,78 @@
-<section class="placeholder-page">
-  <div class="dt-card placeholder-card">
-    <p class="eyebrow">Projects</p>
-    <h2>Project workspace</h2>
-    <p>Project list and create UI will be added next.</p>
+
+<section class="projects-page">
+  <div class="projects-toolbar">
+    <button class="dt-button dt-button-primary" type="button" (click)="openCreateModal()">
+      New Project
+    </button>
+
+    <div class="toolbar-actions">
+      <button class="dt-button" type="button">Search</button>
+      <button class="dt-button" type="button">Sort</button>
+      <button class="dt-button" type="button">Filter</button>
+    </div>
   </div>
+
+  @if (errorMessage()) {
+    <p class="inline-error">{{ errorMessage() }}</p>
+  }
+
+  @if (isLoading()) {
+    <div class="dt-card empty-state">
+      <p>Loading projects...</p>
+    </div>
+  } @else if (projects().length === 0) {
+    <div class="dt-card empty-state">
+      <h2>No projects yet</h2>
+      <p>Create your first project to start organizing DevTrail work.</p>
+      <button class="dt-button dt-button-primary" type="button" (click)="openCreateModal()">
+        New Project
+      </button>
+    </div>
+  } @else {
+    <div class="projects-grid">
+      @for (project of projects(); track project.id) {
+        <app-project-card
+          [project]="project"
+          (edit)="openEditModal($event)"
+          (delete)="openDeleteDialog($event)"
+        />
+      }
+    </div>
+  }
 </section>
+
+<app-modal
+  [open]="isCreateModalOpen()"
+  title="Create project"
+  (closeRequest)="closeCreateModal()"
+>
+  <app-project-form
+    submitLabel="Create project"
+    (formSubmit)="createProject($event)"
+    (cancel)="closeCreateModal()"
+  />
+</app-modal>
+
+<app-modal
+  [open]="isEditModalOpen()"
+  title="Edit project"
+  (closeRequest)="closeEditModal()"
+>
+  <app-project-form
+    [initialProject]="selectedProject()"
+    submitLabel="Save changes"
+    (formSubmit)="updateProject($event)"
+    (cancel)="closeEditModal()"
+  />
+</app-modal>
+
+<app-confirm-dialog
+  [open]="isConfirmDeleteOpen()"
+  title="Delete project"
+  [message]="'Delete ' + (projectPendingDeletion()?.name ?? 'this project') + '?'"
+  confirmLabel="Delete"
+  cancelLabel="Cancel"
+  [danger]="true"
+  (confirm)="confirmDeleteProject()"
+  (cancel)="closeDeleteDialog()"
+/>
