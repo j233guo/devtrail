@@ -41,30 +41,26 @@
   }
 </section>
 
-<app-modal
-  [open]="isCreateModalOpen()"
-  title="Create project"
-  (closeRequest)="closeCreateModal()"
->
-  <app-project-form
-    submitLabel="Create project"
-    (formSubmit)="createProject($event)"
-    (cancel)="closeCreateModal()"
-  />
-</app-modal>
+@if (isCreateModalOpen()) {
+  <app-modal [open]="true" title="Create project" (closeRequest)="closeCreateModal()">
+    <app-project-form
+      submitLabel="Create project"
+      (formSubmit)="createProject($event)"
+      (cancel)="closeCreateModal()"
+    />
+  </app-modal>
+}
 
-<app-modal
-  [open]="isEditModalOpen()"
-  title="Edit project"
-  (closeRequest)="closeEditModal()"
->
-  <app-project-form
-    [initialProject]="selectedProject()"
-    submitLabel="Save changes"
-    (formSubmit)="updateProject($event)"
-    (cancel)="closeEditModal()"
-  />
-</app-modal>
+@if (isEditModalOpen()) {
+  <app-modal [open]="true" title="Edit project" (closeRequest)="closeEditModal()">
+    <app-project-form
+      [initialProject]="selectedProject()"
+      submitLabel="Save changes"
+      (formSubmit)="updateProject($event)"
+      (cancel)="closeEditModal()"
+    />
+  </app-modal>
+}
 
 <app-confirm-dialog
   [open]="isConfirmDeleteOpen()"

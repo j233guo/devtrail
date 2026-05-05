@@ -2,6 +2,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 
 import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog';
 import { ModalComponent } from '../../../../shared/ui/modal/modal';
+import { ToastService } from '../../../../shared/ui/toast/toast.service';
 import { ProjectCardComponent } from '../project-card/project-card';
 import { ProjectFormComponent } from '../project-form/project-form';
 import {
@@ -18,6 +19,7 @@ import {
 })
 export class ProjectsPage implements OnInit {
   private readonly projectsService = inject(ProjectsService);
+  private readonly toastService = inject(ToastService);
 
   protected readonly projects = signal<IProject[]>([]);
   protected readonly isLoading = signal(true);
@@ -75,10 +77,12 @@ export class ProjectsPage implements OnInit {
     this.projectsService.createProject(payload).subscribe({
       next: () => {
         this.closeCreateModal();
+        this.toastService.success('Project created.');
         this.loadProjects();
       },
       error: () => {
         this.errorMessage.set('Unable to create project.');
+        this.toastService.error('Unable to create project.');
       },
     });
   }
@@ -94,10 +98,12 @@ export class ProjectsPage implements OnInit {
     this.projectsService.updateProject(project.id, payload).subscribe({
       next: () => {
         this.closeEditModal();
+        this.toastService.success('Project updated.');
         this.loadProjects();
       },
       error: () => {
         this.errorMessage.set('Unable to update project.');
+        this.toastService.error('Unable to update project.');
       },
     });
   }
@@ -113,10 +119,12 @@ export class ProjectsPage implements OnInit {
     this.projectsService.deleteProject(project.id).subscribe({
       next: () => {
         this.closeDeleteDialog();
+        this.toastService.success('Project deleted.');
         this.loadProjects();
       },
       error: () => {
         this.errorMessage.set('Unable to delete project.');
+        this.toastService.error('Unable to delete project.');
       },
     });
   }
@@ -134,6 +142,7 @@ export class ProjectsPage implements OnInit {
       error: () => {
         this.projects.set([]);
         this.errorMessage.set('Unable to load projects.');
+        this.toastService.error('Unable to load projects.');
         this.isLoading.set(false);
       },
     });

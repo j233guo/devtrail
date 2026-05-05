@@ -1,4 +1,4 @@
-import { Component, effect, input, output, signal } from '@angular/core';
+import { Component, computed, effect, input, output, signal } from '@angular/core';
 
 import type { IProject, IProjectPayload } from '../../services/projects.service';
 
@@ -24,6 +24,15 @@ export class ProjectFormComponent {
   protected readonly techStackText = signal('');
   protected readonly status = signal('active');
   protected readonly wasSubmitted = signal(false);
+  protected readonly isNameTouched = signal(false);
+  protected readonly isStatusTouched = signal(false);
+  protected readonly isFormValid = computed(() => this.name().trim().length > 0 && this.status().trim().length > 0);
+  protected readonly shouldShowNameError = computed(
+    () => !this.name().trim() && (this.isNameTouched() || this.wasSubmitted()),
+  );
+  protected readonly shouldShowStatusError = computed(
+    () => !this.status().trim() && (this.isStatusTouched() || this.wasSubmitted()),
+  );
   protected readonly statusOptions: IProjectStatusOption[] = [
     { label: 'Active', value: 'active' },
     { label: 'Paused', value: 'paused' },
@@ -33,18 +42,18 @@ export class ProjectFormComponent {
 
   constructor() {
     effect(() => {
-      const project = this.initialProject();
-      this.name.set(project?.name ?? '');
-      this.description.set(project?.description ?? '');
-      this.techStackText.set(project?.tech_stack.join(', ') ?? '');
-      this.status.set(project?.status ?? 'active');
-      this.wasSubmitted.set(false);
+      this.initializeForm(this.initialProject());
     });
   }
 
   // Updates the name signal from a text input event.
   protected updateName(event: Event): void {
     this.name.set(this.getInputValue(event));
+  }
+
+  // Marks the name field as touched after blur.
+  protected markNameTouched(): void {
+    this.isNameTouched.set(true);
   }
 
   // Updates the description signal from a textarea input event.
@@ -62,11 +71,16 @@ export class ProjectFormComponent {
     this.status.set(this.getInputValue(event));
   }
 
+  // Marks the status field as touched after blur.
+  protected markStatusTouched(): void {
+    this.isStatusTouched.set(true);
+  }
+
   // Emits a validated project payload for create or update.
   protected submitForm(): void {
     this.wasSubmitted.set(true);
 
-    if (!this.name().trim() || !this.status().trim()) {
+    if (!this.isFormValid()) {
       return;
     }
 
@@ -90,6 +104,22 @@ export class ProjectFormComponent {
       event.target instanceof HTMLSelectElement
       ? event.target.value
       : '';
+  }
+
+  // Initializes form values and clears validation state for create or edit mode.
+  private initializeForm(project: IProject | IProjectPayload | null): void {
+    this.name.set(project?.name ?? '');
+    this.description.set(project?.description ?? '');
+    this.techStackText.set(project?.tech_stack.join(', ') ?? '');
+    this.status.set(project?.status?.trim() || 'active');
+    this.clearValidationState();
+  }
+
+  // Clears touched and submitted state when the form is reset or rehydrated.
+  private clearValidationState(): void {
+    this.wasSubmitted.set(false);
+    this.isNameTouched.set(false);
+    this.isStatusTouched.set(false);
   }
 
   // Converts comma-separated tech stack text into the API string array.

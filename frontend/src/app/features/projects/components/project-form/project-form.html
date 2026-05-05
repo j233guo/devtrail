@@ -5,10 +5,11 @@
       type="text"
       [value]="name()"
       (input)="updateName($event)"
+      (blur)="markNameTouched()"
       placeholder="Project name"
       autocomplete="off"
     />
-    @if (wasSubmitted() && !name().trim()) {
+    @if (shouldShowNameError()) {
       <small>Name is required.</small>
     }
   </label>
@@ -35,18 +36,20 @@
 
   <label>
     <span>Status</span>
-    <select [value]="status()" (change)="updateStatus($event)">
+    <select [value]="status()" (change)="updateStatus($event)" (blur)="markStatusTouched()">
       @for (option of statusOptions; track option.value) {
-        <option [value]="option.value">{{ option.label }}</option>
+        <option [value]="option.value" [selected]="option.value === status()">{{ option.label }}</option>
       }
     </select>
-    @if (wasSubmitted() && !status().trim()) {
+    @if (shouldShowStatusError()) {
       <small>Status is required.</small>
     }
   </label>
 
   <div class="form-actions">
     <button class="dt-button" type="button" (click)="cancelForm()">Cancel</button>
-    <button class="dt-button dt-button-primary" type="submit">{{ submitLabel() }}</button>
+    <button class="dt-button dt-button-primary" type="submit" [disabled]="!isFormValid()">
+      {{ submitLabel() }}
+    </button>
   </div>
 </form>

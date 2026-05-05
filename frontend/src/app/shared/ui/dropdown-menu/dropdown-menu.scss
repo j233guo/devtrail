@@ -44,3 +44,12 @@
 ::ng-deep .dropdown-panel button:hover {
   background: var(--color-surface);
 }
+
+::ng-deep .dropdown-panel .dropdown-action-danger {
+  color: var(--color-danger);
+}
+
+::ng-deep .dropdown-panel .dropdown-action-danger:hover {
+  color: var(--color-bg);
+  background: var(--color-danger);
+}
