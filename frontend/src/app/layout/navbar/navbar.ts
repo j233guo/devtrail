@@ -1,38 +1,57 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { filter } from 'rxjs';
+import { ProjectsService } from '../../features/projects/services/projects.service';
 
 // Represents display metadata for a routed page.
 interface IRouteDisplay {
   title: string;
   subtitle: string;
-  showProjectAction: boolean;
+  crumbs: string[];
+  showBackToProjects: boolean;
 }
 
 @Component({
   selector: 'app-navbar',
+  imports: [RouterLink],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
 })
 export class NavbarComponent implements OnInit {
   private readonly router = inject(Router);
+  private readonly projectsService = inject(ProjectsService);
 
-  protected readonly pageDisplay = signal<IRouteDisplay>(this.getRouteDisplay(this.router.url));
+  private readonly currentUrl = signal(this.router.url);
+  protected readonly pageDisplay = computed(() => this.getRouteDisplay(this.currentUrl()));
 
   // Keeps navbar copy in sync with the active route.
   ngOnInit(): void {
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
-      this.pageDisplay.set(this.getRouteDisplay(this.router.url));
+      this.currentUrl.set(this.router.url);
     });
   }
 
   // Maps the current URL to navbar title, subtitle, and actions.
   private getRouteDisplay(url: string): IRouteDisplay {
     if (url.startsWith('/projects')) {
+      const activeProject = this.projectsService
+        .recent_projects()
+        .find((project) => project.id === this.projectsService.active_project_id());
+
+      if (activeProject && url !== '/projects') {
+        return {
+          title: activeProject.name,
+          subtitle: 'Project workspace',
+          crumbs: ['Projects', activeProject.name],
+          showBackToProjects: true,
+        };
+      }
+
       return {
         title: 'Projects',
         subtitle: 'Project list and create UI will be added next.',
-        showProjectAction: true,
+        crumbs: ['Projects'],
+        showBackToProjects: false,
       };
     }
 
@@ -40,14 +59,16 @@ export class NavbarComponent implements OnInit {
       return {
         title: 'Settings',
         subtitle: 'Workspace preferences and theme controls will live here later.',
-        showProjectAction: false,
+        crumbs: ['Settings'],
+        showBackToProjects: false,
       };
     }
 
     return {
       title: 'Dashboard',
       subtitle: 'Your local-first development workspace at a glance.',
-      showProjectAction: false,
+      crumbs: ['Dashboard'],
+      showBackToProjects: false,
     };
   }
 }

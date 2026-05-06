@@ -1,11 +1,12 @@
 import { Component, input, output } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import { DropdownMenuComponent } from '../../../../shared/ui/dropdown-menu/dropdown-menu';
 import type { IProject } from '../../services/projects.service';
 
 @Component({
   selector: 'app-project-card',
-  imports: [DropdownMenuComponent],
+  imports: [DropdownMenuComponent, RouterLink],
   templateUrl: './project-card.html',
   styleUrl: './project-card.scss',
 })
@@ -15,12 +16,14 @@ export class ProjectCardComponent {
   readonly delete = output<IProject>();
 
   // Emits the selected project for parent-controlled editing.
-  protected requestEdit(): void {
+  protected requestEdit(event: Event): void {
+    event.stopPropagation();
     this.edit.emit(this.project());
   }
 
   // Emits the selected project for parent-controlled delete confirmation.
-  protected requestDelete(): void {
+  protected requestDelete(event: Event): void {
+    event.stopPropagation();
     this.delete.emit(this.project());
   }
 

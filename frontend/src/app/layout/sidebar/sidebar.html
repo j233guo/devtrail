@@ -43,14 +43,31 @@
       </button>
 
       <div class="projects-content">
-        <a class="project-link project-link--all" routerLink="/projects">All projects</a>
-
-        @for (project of recentProjects(); track project.name) {
-          <div class="project-link">
-            <span>{{ project.name }}</span>
-            <small>{{ project.status }}</small>
-          </div>
+        @if (projectsService.recent_projects().length > 0) {
+          @for (project of projectsService.recent_projects(); track project.id) {
+            <a
+              class="project-link"
+              [class.project-link--active]="projectsService.active_project_id() === project.id"
+              [routerLink]="['/projects', project.id]"
+            >
+              <span>{{ project.name }}</span>
+              <small>{{ project.status }}</small>
+            </a>
+          }
+        } @else {
+          <p class="project-link project-link--empty">
+            <span>No recent projects</span>
+          </p>
         }
+
+        <a
+          class="project-link project-link--all"
+          routerLink="/projects"
+          routerLinkActive="project-link--active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <span>All projects</span>
+        </a>
       </div>
     </section>
   </nav>

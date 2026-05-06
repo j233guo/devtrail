@@ -1,14 +1,20 @@
-<article class="dt-card project-card">
+<article
+  class="dt-card project-card"
+  [routerLink]="['/projects', project().id]"
+  tabindex="0"
+>
   <header class="project-header">
     <div>
       <span class="status-pill">{{ project().status }}</span>
       <h2>{{ project().name }}</h2>
     </div>
 
-    <app-dropdown-menu triggerLabel="Actions">
-      <button type="button" (click)="requestEdit()">Edit</button>
-      <button class="dropdown-action-danger" type="button" (click)="requestDelete()">Delete</button>
-    </app-dropdown-menu>
+    <div class="project-actions" (click)="$event.stopPropagation()">
+      <app-dropdown-menu triggerLabel="Actions">
+        <button type="button" (click)="requestEdit($event)">Edit</button>
+        <button class="dropdown-action-danger" type="button" (click)="requestDelete($event)">Delete</button>
+      </app-dropdown-menu>
+    </div>
   </header>
 
   <p class="project-description">

@@ -166,10 +166,20 @@
   text-decoration: none;
 }
 
-.project-link--all,
+.project-link--active,
 .project-link:hover {
   color: var(--color-text);
   background: var(--color-surface-elevated);
+}
+
+.project-link--all {
+  margin-top: var(--space-xs);
+  border: 1px solid var(--color-border);
+}
+
+.project-link--empty {
+  margin: 0;
+  cursor: default;
 }
 
 .project-link span,

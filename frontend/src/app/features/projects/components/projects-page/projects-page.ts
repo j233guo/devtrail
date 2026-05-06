@@ -96,8 +96,9 @@ export class ProjectsPage implements OnInit {
     }
 
     this.projectsService.updateProject(project.id, payload).subscribe({
-      next: () => {
+      next: (response) => {
         this.closeEditModal();
+        this.projectsService.updateRecentProject(response.data);
         this.toastService.success('Project updated.');
         this.loadProjects();
       },
@@ -119,6 +120,7 @@ export class ProjectsPage implements OnInit {
     this.projectsService.deleteProject(project.id).subscribe({
       next: () => {
         this.closeDeleteDialog();
+        this.projectsService.removeRecentProject(project.id);
         this.toastService.success('Project deleted.');
         this.loadProjects();
       },

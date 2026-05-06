@@ -1,17 +1,12 @@
 import { Component, OnInit, inject, input, output, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { ProjectsService } from '../../features/projects/services/projects.service';
 
 import {
   type IDbHealthResponse,
   type IHealthResponse,
   NetworkService,
 } from '../../core/network/network.service';
-
-// Represents a temporary recent project entry for the sidebar preview.
-interface IRecentProjectPlaceholder {
-  name: string;
-  status: string;
-}
 
 @Component({
   selector: 'app-sidebar',
@@ -24,17 +19,13 @@ export class SidebarComponent implements OnInit {
   readonly toggleSidebar = output<void>();
 
   private readonly networkService = inject(NetworkService);
+  protected readonly projectsService = inject(ProjectsService);
 
   protected readonly isProjectsExpanded = signal(true);
   protected readonly isHealthLoading = signal(true);
   protected readonly healthError = signal<string | null>(null);
   protected readonly backendHealth = signal<IHealthResponse | null>(null);
   protected readonly dbHealth = signal<IDbHealthResponse | null>(null);
-  protected readonly recentProjects = signal<IRecentProjectPlaceholder[]>([
-    { name: 'DevTrail core', status: 'active' },
-    { name: 'Local planning', status: 'queued' },
-    { name: 'UI foundation', status: 'draft' },
-  ]);
 
   // Loads backend and database health for the sidebar status panel.
   ngOnInit(): void {

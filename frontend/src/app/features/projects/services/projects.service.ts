@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import type { Observable } from 'rxjs';
 
 import { type IApiResponse, NetworkService } from '../../../core/network/network.service';
@@ -32,6 +32,11 @@ export interface IDeleteProjectResult {
 })
 export class ProjectsService {
   private readonly networkService = inject(NetworkService);
+  private readonly recentProjectsState = signal<IProject[]>([]);
+  private readonly activeProjectIdState = signal<number | null>(null);
+
+  readonly recent_projects = this.recentProjectsState.asReadonly();
+  readonly active_project_id = this.activeProjectIdState.asReadonly();
 
   // Loads all projects from the backend.
   listProjects(): Observable<IApiResponse<IProject[]>> {
@@ -56,5 +61,36 @@ export class ProjectsService {
   // Deletes an existing project by id.
   deleteProject(id: number): Observable<IApiResponse<IDeleteProjectResult>> {
     return this.networkService.delete<IDeleteProjectResult>(`/api/projects/${id}`);
+  }
+
+  // Remembers a project as recently visited, keeping the newest visit first.
+  rememberRecentProject(project: IProject): void {
+    this.recentProjectsState.update((projects) => [
+      project,
+      ...projects.filter((recentProject) => recentProject.id !== project.id),
+    ].slice(0, 5));
+  }
+
+  // Removes a project from the in-memory recent project list.
+  removeRecentProject(project_id: number): void {
+    this.recentProjectsState.update((projects) =>
+      projects.filter((project) => project.id !== project_id),
+    );
+
+    if (this.activeProjectIdState() === project_id) {
+      this.setActiveProjectId(null);
+    }
+  }
+
+  // Sets the active project id for navigation highlights.
+  setActiveProjectId(project_id: number | null): void {
+    this.activeProjectIdState.set(project_id);
+  }
+
+  // Updates a remembered project if it already exists in recent projects.
+  updateRecentProject(project: IProject): void {
+    this.recentProjectsState.update((projects) =>
+      projects.map((recentProject) => (recentProject.id === project.id ? project : recentProject)),
+    );
   }
 }
