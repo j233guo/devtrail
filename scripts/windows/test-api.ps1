@@ -1,7 +1,7 @@
 <#
   Script name: test-api.ps1
   Purpose: Validate backend, database, frontend proxy, and Projects API health.
-  Usage: pwsh ./scripts/test-api.ps1
+  Usage: pwsh ./scripts/windows/test-api.ps1
 #>
 
 $ErrorActionPreference = "Stop"
@@ -66,7 +66,7 @@ Write-Host "Testing Projects API..."
 
 $projectPayload = @{
   name = "DevTrail API Test"
-  description = "Temporary project created by scripts/test-api.ps1."
+  description = "Temporary project created by scripts/windows/test-api.ps1."
   tech_stack = @("Angular", "Fastify", "SQLite")
   status = "active"
 } | ConvertTo-Json -Depth 10
@@ -104,7 +104,7 @@ Write-Host "Project load check passed."
 
 $updatedProjectPayload = @{
   name = "DevTrail API Test Updated"
-  description = "Temporary project updated by scripts/test-api.ps1."
+  description = "Temporary project updated by scripts/windows/test-api.ps1."
   tech_stack = @("Angular", "Fastify", "SQLite", "TypeScript")
   status = "active"
 } | ConvertTo-Json -Depth 10

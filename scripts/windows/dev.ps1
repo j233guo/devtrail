@@ -1,13 +1,13 @@
 <#
   Script name: dev.ps1
   Purpose: Start the DevTrail backend and frontend development servers.
-  Usage: pwsh ./scripts/dev.ps1
+  Usage: pwsh ./scripts/windows/dev.ps1
 #>
 
 $ErrorActionPreference = "Stop"
 
 # Resolve paths
-$repoRoot = Split-Path -Parent $PSScriptRoot
+$repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 
 # Start services
 Write-Host "Starting DevTrail backend and frontend in separate PowerShell windows..."
