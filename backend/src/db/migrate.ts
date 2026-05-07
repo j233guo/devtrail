@@ -20,6 +20,10 @@ const migrations: IMigration[] = [
     name: "001_create_projects",
     fileName: "001_create_projects.sql",
   },
+  {
+    name: "002_create_tasks",
+    fileName: "002_create_tasks.sql",
+  },
 ];
 
 // Applies the initial schema and any pending named migrations.

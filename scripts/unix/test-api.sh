@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Script: test-api.sh
-# Purpose: Validate backend, database, frontend proxy, and Projects API health.
+# Purpose: Validate backend, database, frontend proxy, Projects API, and Tasks API health.
 # Usage: ./scripts/unix/test-api.sh
 
 # Resolve paths
@@ -13,8 +13,15 @@ repo_root="$(cd "$script_dir/../.." && pwd)"
 backend_url="http://localhost:3000"
 frontend_url="http://localhost:4200"
 project_id=""
+task_id=""
 
 cleanup_project() {
+  if [[ -n "$task_id" ]]; then
+    curl --silent --show-error --fail \
+      --request DELETE \
+      "$backend_url/api/tasks/$task_id" >/dev/null || true
+  fi
+
   if [[ -n "$project_id" ]]; then
     curl --silent --show-error --fail \
       --request DELETE \
@@ -133,5 +140,67 @@ assert_json_value "$deleted_project_response" "data.deleted" "true"
 project_id=""
 echo "Project delete check passed."
 echo "Projects API test passed."
+
+# Tasks API checks
+echo "Testing Tasks API..."
+task_project_payload='{
+  "name": "DevTrail Tasks API Test",
+  "description": "Temporary project created for Tasks API checks.",
+  "tech_stack": ["Fastify", "SQLite"],
+  "status": "active"
+}'
+
+created_task_project_response="$(request_json POST "$backend_url/api/projects" "$task_project_payload")"
+assert_json_value "$created_task_project_response" "code" "CREATED"
+project_id="$(json_value "$created_task_project_response" "data.id")"
+echo "Task test project create check passed."
+
+task_payload='{
+  "title": "Write Tasks API smoke test",
+  "description": "Temporary task created by scripts/unix/test-api.sh.",
+  "status": "todo",
+  "priority": "medium",
+  "acceptance_criteria": "Task API happy path passes."
+}'
+
+created_task_response="$(request_json POST "$backend_url/api/projects/$project_id/tasks" "$task_payload")"
+assert_json_value "$created_task_response" "code" "CREATED"
+assert_json_value "$created_task_response" "data.project_id" "$project_id"
+task_id="$(json_value "$created_task_response" "data.id")"
+echo "Task create check passed."
+
+listed_tasks_response="$(request_json GET "$backend_url/api/projects/$project_id/tasks")"
+assert_json_value "$listed_tasks_response" "code" "OK"
+echo "Task list check passed."
+
+loaded_task_response="$(request_json GET "$backend_url/api/tasks/$task_id")"
+assert_json_value "$loaded_task_response" "code" "OK"
+assert_json_value "$loaded_task_response" "data.id" "$task_id"
+echo "Task load check passed."
+
+updated_task_payload='{
+  "title": "Write Tasks API smoke test updated",
+  "description": "Temporary task updated by scripts/unix/test-api.sh.",
+  "status": "in_progress",
+  "priority": "high",
+  "acceptance_criteria": "Updated task API happy path passes."
+}'
+
+updated_task_response="$(request_json PUT "$backend_url/api/tasks/$task_id" "$updated_task_payload")"
+assert_json_value "$updated_task_response" "code" "OK"
+assert_json_value "$updated_task_response" "data.priority" "high"
+echo "Task update check passed."
+
+deleted_task_response="$(request_json DELETE "$backend_url/api/tasks/$task_id")"
+assert_json_value "$deleted_task_response" "code" "OK"
+assert_json_value "$deleted_task_response" "data.deleted" "true"
+task_id=""
+echo "Task delete check passed."
+
+deleted_task_project_response="$(request_json DELETE "$backend_url/api/projects/$project_id")"
+assert_json_value "$deleted_task_project_response" "code" "OK"
+project_id=""
+echo "Task test project cleanup check passed."
+echo "Tasks API test passed."
 
 echo "All API checks passed."

@@ -1,6 +1,6 @@
 <#
   Script name: test-api.ps1
-  Purpose: Validate backend, database, frontend proxy, and Projects API health.
+  Purpose: Validate backend, database, frontend proxy, Projects API, and Tasks API health.
   Usage: pwsh ./scripts/windows/test-api.ps1
 #>
 
@@ -140,5 +140,129 @@ if ($deletedProjectResponse.data.deleted -ne $true) {
 Write-Host "Project delete check passed."
 Write-Host "Projects API test passed."
 
+# Tasks API checks
+Write-Host "Testing Tasks API..."
+
+$taskProjectPayload = @{
+  name = "DevTrail Tasks API Test"
+  description = "Temporary project created for Tasks API checks."
+  tech_stack = @("Fastify", "SQLite")
+  status = "active"
+} | ConvertTo-Json -Depth 10
+
+$createdTaskProjectResponse = Invoke-RestMethod `
+  -Uri "http://localhost:3000/api/projects" `
+  -Method POST `
+  -ContentType "application/json" `
+  -Body $taskProjectPayload
+
+if ($createdTaskProjectResponse.code -ne "CREATED") {
+  throw "Task project create failed. Expected code=CREATED."
+}
+
+$taskProjectId = $createdTaskProjectResponse.data.id
+Write-Host "Task test project create check passed."
+
+$taskPayload = @{
+  title = "Write Tasks API smoke test"
+  description = "Temporary task created by scripts/windows/test-api.ps1."
+  status = "todo"
+  priority = "medium"
+  acceptance_criteria = "Task API happy path passes."
+} | ConvertTo-Json -Depth 10
+
+$createdTaskResponse = Invoke-RestMethod `
+  -Uri "http://localhost:3000/api/projects/$taskProjectId/tasks" `
+  -Method POST `
+  -ContentType "application/json" `
+  -Body $taskPayload
+
+if ($createdTaskResponse.code -ne "CREATED") {
+  throw "Task create failed. Expected code=CREATED."
+}
+
+if ($createdTaskResponse.data.project_id -ne $taskProjectId) {
+  throw "Task create failed. Unexpected project_id."
+}
+
+$taskId = $createdTaskResponse.data.id
+Write-Host "Task create check passed."
+
+$listedTasksResponse = Invoke-RestMethod `
+  -Uri "http://localhost:3000/api/projects/$taskProjectId/tasks" `
+  -Method GET
+
+if ($listedTasksResponse.code -ne "OK") {
+  throw "Task list failed. Expected code=OK."
+}
+
+if ($listedTasksResponse.data.Count -lt 1) {
+  throw "Task list failed. Expected at least one task."
+}
+
+Write-Host "Task list check passed."
+
+$loadedTaskResponse = Invoke-RestMethod `
+  -Uri "http://localhost:3000/api/tasks/$taskId" `
+  -Method GET
+
+if ($loadedTaskResponse.code -ne "OK") {
+  throw "Task load failed. Expected code=OK."
+}
+
+if ($loadedTaskResponse.data.id -ne $taskId) {
+  throw "Task load failed. Unexpected task id."
+}
+
+Write-Host "Task load check passed."
+
+$updatedTaskPayload = @{
+  title = "Write Tasks API smoke test updated"
+  description = "Temporary task updated by scripts/windows/test-api.ps1."
+  status = "in_progress"
+  priority = "high"
+  acceptance_criteria = "Updated task API happy path passes."
+} | ConvertTo-Json -Depth 10
+
+$updatedTaskResponse = Invoke-RestMethod `
+  -Uri "http://localhost:3000/api/tasks/$taskId" `
+  -Method PUT `
+  -ContentType "application/json" `
+  -Body $updatedTaskPayload
+
+if ($updatedTaskResponse.code -ne "OK") {
+  throw "Task update failed. Expected code=OK."
+}
+
+if ($updatedTaskResponse.data.priority -ne "high") {
+  throw "Task update failed. Expected priority=high."
+}
+
+Write-Host "Task update check passed."
+
+$deletedTaskResponse = Invoke-RestMethod `
+  -Uri "http://localhost:3000/api/tasks/$taskId" `
+  -Method DELETE
+
+if ($deletedTaskResponse.code -ne "OK") {
+  throw "Task delete failed. Expected code=OK."
+}
+
+if ($deletedTaskResponse.data.deleted -ne $true) {
+  throw "Task delete failed. Expected deleted=true."
+}
+
+Write-Host "Task delete check passed."
+
+$deletedTaskProjectResponse = Invoke-RestMethod `
+  -Uri "http://localhost:3000/api/projects/$taskProjectId" `
+  -Method DELETE
+
+if ($deletedTaskProjectResponse.code -ne "OK") {
+  throw "Task project cleanup failed. Expected code=OK."
+}
+
+Write-Host "Task test project cleanup check passed."
+Write-Host "Tasks API test passed."
 
 Write-Host "All API checks passed."
