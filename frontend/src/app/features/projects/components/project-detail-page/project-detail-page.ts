@@ -4,6 +4,7 @@ import type { Subscription } from 'rxjs';
 
 import { ModalComponent } from '../../../../shared/ui/modal/modal';
 import { ToastService } from '../../../../shared/ui/toast/toast.service';
+import { TaskBoardComponent } from '../../../tasks/components/task-board/task-board';
 import { ProjectFormComponent } from '../project-form/project-form';
 import {
   type IProject,
@@ -13,7 +14,7 @@ import {
 
 @Component({
   selector: 'app-project-detail-page',
-  imports: [ModalComponent, ProjectFormComponent],
+  imports: [ModalComponent, ProjectFormComponent, TaskBoardComponent],
   templateUrl: './project-detail-page.html',
   styleUrl: './project-detail-page.scss',
 })

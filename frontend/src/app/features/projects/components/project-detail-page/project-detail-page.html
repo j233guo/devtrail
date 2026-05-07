@@ -11,9 +11,20 @@
   <section class="project-detail">
     <header class="project-summary">
       <div>
-        <span class="status-pill">{{ activeProject.status }}</span>
+        <div class="summary-meta">
+          <span class="status-pill">{{ activeProject.status }}</span>
+          @if (activeProject.tech_stack.length > 0) {
+            <div class="tech-stack" aria-label="Tech stack">
+              @for (tech of activeProject.tech_stack; track tech) {
+                <span>{{ tech }}</span>
+              }
+            </div>
+          }
+        </div>
         <h2>{{ activeProject.name }}</h2>
-        <p>{{ activeProject.description || 'No description yet.' }}</p>
+        @if (activeProject.description) {
+          <p>{{ activeProject.description }}</p>
+        }
       </div>
 
       <button class="dt-button dt-button-primary" type="button" (click)="openEditModal()">
@@ -21,18 +32,7 @@
       </button>
     </header>
 
-    @if (activeProject.tech_stack.length > 0) {
-      <div class="tech-stack" aria-label="Tech stack">
-        @for (tech of activeProject.tech_stack; track tech) {
-          <span>{{ tech }}</span>
-        }
-      </div>
-    }
-
-    <section class="dt-card tasks-placeholder">
-      <h3>Tasks</h3>
-      <p>Task list and task workspace will be added next.</p>
-    </section>
+    <app-task-board [project_id]="activeProject.id" />
   </section>
 }
 

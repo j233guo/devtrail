@@ -1,0 +1,55 @@
+/* Groups tasks for a single board status. */
+.task-column {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+h3 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 1rem;
+}
+
+header span {
+  min-width: 28px;
+  min-height: 28px;
+  display: inline-grid;
+  place-items: center;
+  color: var(--color-text-muted);
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.task-list {
+  min-height: 0;
+  display: grid;
+  align-content: start;
+  gap: var(--space-md);
+  overflow: auto;
+}
+
+.empty-column {
+  margin: 0;
+  padding: var(--space-lg);
+  color: var(--color-text-muted);
+  text-align: center;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+}

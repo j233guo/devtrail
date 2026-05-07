@@ -1,0 +1,96 @@
+<section class="task-board">
+  <div class="task-toolbar">
+    <button class="dt-button dt-button-primary" type="button" (click)="openCreateModal()">
+      New Task
+    </button>
+
+    <div class="toolbar-actions">
+      <button class="dt-button" type="button">Search</button>
+      <button class="dt-button" type="button">Sort</button>
+      <button class="dt-button" type="button">Filter</button>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <p class="inline-error">{{ errorMessage() }}</p>
+  }
+
+  @if (isLoading()) {
+    <div class="dt-card task-state">
+      <p>Loading tasks...</p>
+    </div>
+  } @else {
+    <div class="board-columns">
+      <app-task-column
+        title="Todo"
+        [status]="TaskStatus.Todo"
+        [tasks]="todoTasks()"
+        (edit)="openEditModal($event)"
+        (delete)="openDeleteDialog($event)"
+        (archive)="archiveTask($event)"
+        (statusChange)="changeTaskStatus($event)"
+      />
+
+      <app-task-column
+        title="In Progress"
+        [status]="TaskStatus.InProgress"
+        [tasks]="inProgressTasks()"
+        (edit)="openEditModal($event)"
+        (delete)="openDeleteDialog($event)"
+        (archive)="archiveTask($event)"
+        (statusChange)="changeTaskStatus($event)"
+      />
+
+      <app-task-column
+        title="Done"
+        [status]="TaskStatus.Done"
+        [tasks]="doneTasks()"
+        (edit)="openEditModal($event)"
+        (delete)="openDeleteDialog($event)"
+        (archive)="archiveTask($event)"
+        (statusChange)="changeTaskStatus($event)"
+      />
+    </div>
+
+    <app-archived-tasks-section
+      [tasks]="archivedTasks()"
+      [isExpanded]="isArchivedExpanded()"
+      (toggle)="toggleArchived()"
+      (edit)="openEditModal($event)"
+      (delete)="openDeleteDialog($event)"
+      (restore)="restoreTask($event)"
+    />
+  }
+</section>
+
+@if (isCreateModalOpen()) {
+  <app-modal [open]="true" title="Create task" (closeRequest)="closeCreateModal()">
+    <app-task-form
+      submitLabel="Create task"
+      (formSubmit)="createTask($event)"
+      (cancel)="closeCreateModal()"
+    />
+  </app-modal>
+}
+
+@if (isEditModalOpen()) {
+  <app-modal [open]="true" title="Edit task" (closeRequest)="closeEditModal()">
+    <app-task-form
+      [initialTask]="selectedTask()"
+      submitLabel="Save changes"
+      (formSubmit)="updateTask($event)"
+      (cancel)="closeEditModal()"
+    />
+  </app-modal>
+}
+
+<app-confirm-dialog
+  [open]="isConfirmDeleteOpen()"
+  title="Delete task"
+  [message]="'Delete ' + (taskPendingDeletion()?.title ?? 'this task') + '?'"
+  confirmLabel="Delete"
+  cancelLabel="Cancel"
+  [danger]="true"
+  (confirm)="confirmDeleteTask()"
+  (cancel)="closeDeleteDialog()"
+/>

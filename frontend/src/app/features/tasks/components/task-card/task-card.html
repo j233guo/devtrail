@@ -1,0 +1,31 @@
+<article class="task-card" [class.task-card--archived]="task().status === TaskStatus.Archived">
+  <header>
+    <div>
+      <span class="priority-pill">{{ task().priority }}</span>
+      <h3>{{ task().title }}</h3>
+    </div>
+
+    <app-dropdown-menu triggerLabel="Actions">
+      <button type="button" (click)="requestEdit()">Edit</button>
+      <button type="button" (click)="requestMarkTodo()">Move to Todo</button>
+      <button type="button" (click)="requestMarkInProgress()">Move to In Progress</button>
+      <button type="button" (click)="requestMarkDone()">Move to Done</button>
+      <button type="button" (click)="requestArchive()">
+        {{ task().status === TaskStatus.Archived ? 'Restore to Todo' : 'Archive' }}
+      </button>
+      <button class="dropdown-action-danger" type="button" (click)="requestDelete()">Delete</button>
+    </app-dropdown-menu>
+  </header>
+
+  @if (task().description) {
+    <p class="task-description">{{ task().description }}</p>
+  }
+
+  @if (task().acceptance_criteria) {
+    <p class="acceptance-preview">{{ task().acceptance_criteria }}</p>
+  }
+
+  <footer>
+    <span>Updated {{ formatTaskDate(task()) }}</span>
+  </footer>
+</article>
