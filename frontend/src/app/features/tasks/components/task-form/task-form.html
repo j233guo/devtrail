@@ -1,0 +1,69 @@
+<form class="task-form" (submit)="submitForm(); $event.preventDefault()">
+  <label>
+    <span>Title</span>
+    <input
+      type="text"
+      [value]="title()"
+      (input)="updateTitle($event)"
+      (blur)="markTitleTouched()"
+      placeholder="Task title"
+      autocomplete="off"
+    />
+    @if (shouldShowTitleError()) {
+      <small>Title is required.</small>
+    }
+  </label>
+
+  <label>
+    <span>Description</span>
+    <textarea
+      rows="3"
+      [value]="description()"
+      (input)="updateDescription($event)"
+      placeholder="What needs to happen?"
+    ></textarea>
+  </label>
+
+  <div class="form-grid">
+    <label>
+      <span>Status</span>
+      <select [value]="status()" (change)="updateStatus($event)" (blur)="markStatusTouched()">
+        @for (option of statusOptions; track option.value) {
+          <option [value]="option.value" [selected]="option.value === status()">{{ option.label }}</option>
+        }
+      </select>
+      @if (shouldShowStatusError()) {
+        <small>Status is required.</small>
+      }
+    </label>
+
+    <label>
+      <span>Priority</span>
+      <select [value]="priority()" (change)="updatePriority($event)" (blur)="markPriorityTouched()">
+        @for (option of priorityOptions; track option.value) {
+          <option [value]="option.value" [selected]="option.value === priority()">{{ option.label }}</option>
+        }
+      </select>
+      @if (shouldShowPriorityError()) {
+        <small>Priority is required.</small>
+      }
+    </label>
+  </div>
+
+  <label>
+    <span>Acceptance criteria</span>
+    <textarea
+      rows="3"
+      [value]="acceptanceCriteria()"
+      (input)="updateAcceptanceCriteria($event)"
+      placeholder="How will we know this is complete?"
+    ></textarea>
+  </label>
+
+  <div class="form-actions">
+    <button class="dt-button" type="button" (click)="cancelForm()">Cancel</button>
+    <button class="dt-button dt-button-primary" type="submit" [disabled]="!isFormValid()">
+      {{ submitLabel() }}
+    </button>
+  </div>
+</form>

@@ -1,0 +1,88 @@
+:host {
+  display: block;
+  min-height: 0;
+}
+
+.task-ai-panel {
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  align-content: start;
+  gap: var(--space-md);
+  overflow-y: auto;
+  padding: var(--space-md);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+header h2,
+header p,
+.ai-actions h3,
+.output-panel h3,
+.output-panel p,
+.ai-note {
+  margin: 0;
+}
+
+header h2 {
+  color: var(--color-text);
+  font-size: 1.08rem;
+}
+
+header p,
+.output-panel p,
+.ai-note {
+  color: var(--color-text-muted);
+  line-height: 1.45;
+}
+
+label,
+.ai-actions,
+.output-panel {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+label span,
+.ai-actions h3,
+.output-panel h3 {
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+select {
+  min-height: 38px;
+  padding: 0 var(--space-sm);
+  color: var(--color-text);
+  background: var(--color-surface-elevated);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  font: inherit;
+}
+
+.ai-actions .dt-button {
+  justify-content: flex-start;
+}
+
+.ai-action-active {
+  border-color: color-mix(in srgb, var(--color-primary) 34%, var(--color-border));
+}
+
+.output-panel {
+  min-height: 180px;
+  align-content: start;
+  padding: var(--space-md);
+  background: var(--color-surface-elevated);
+  border: var(--border-width) dashed var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.ai-note {
+  padding-top: var(--space-sm);
+  border-top: var(--border-width) solid var(--color-border);
+  font-size: 0.86rem;
+}

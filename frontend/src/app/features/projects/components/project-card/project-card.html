@@ -1,0 +1,43 @@
+<article
+  class="dt-card project-card"
+  [routerLink]="['/projects', project().id]"
+  tabindex="0"
+>
+  <header class="project-header">
+    <div>
+      <span
+        class="status-pill"
+        [class.status-pill--active]="project().status === 'active'"
+        [class.status-pill--paused]="project().status === 'paused'"
+        [class.status-pill--completed]="project().status === 'completed'"
+        [class.status-pill--archived]="project().status === 'archived'"
+      >
+        {{ project().status }}
+      </span>
+      <h2>{{ project().name }}</h2>
+    </div>
+
+    <div class="project-actions" (click)="$event.stopPropagation()">
+      <app-dropdown-menu triggerLabel="Actions">
+        <button type="button" (click)="requestEdit($event)">Edit</button>
+        <button class="dropdown-action-danger" type="button" (click)="requestDelete($event)">Delete</button>
+      </app-dropdown-menu>
+    </div>
+  </header>
+
+  <p class="project-description">
+    {{ project().description || 'No description yet.' }}
+  </p>
+
+  @if (project().tech_stack.length > 0) {
+    <div class="tech-stack" aria-label="Tech stack">
+      @for (tech of project().tech_stack; track tech) {
+        <span>{{ tech }}</span>
+      }
+    </div>
+  }
+
+  <footer>
+    <span>Updated {{ formatProjectDate(project()) }}</span>
+  </footer>
+</article>

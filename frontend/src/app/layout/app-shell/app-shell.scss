@@ -1,0 +1,42 @@
+/* Defines the persistent application frame around routed pages. */
+.shell-layout {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  background:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--color-primary) 12%, transparent), transparent 34rem),
+    var(--color-bg);
+  transition: grid-template-columns 180ms ease;
+}
+
+.shell-layout--collapsed {
+  grid-template-columns: 92px minmax(0, 1fr);
+}
+
+.shell-main {
+  min-width: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.shell-content {
+  min-width: 0;
+  padding: var(--space-lg) 0 0;
+}
+
+@media (max-width: 860px) {
+  .shell-layout,
+  .shell-layout--collapsed {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+    padding: var(--space-md);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shell-layout {
+    transition: none;
+  }
+}

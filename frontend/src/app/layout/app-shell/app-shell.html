@@ -1,0 +1,15 @@
+<div class="app-shell shell-layout" [class.shell-layout--collapsed]="isSidebarCollapsed()">
+  <app-sidebar
+    [isCollapsed]="isSidebarCollapsed()"
+    (toggleSidebar)="toggleSidebar()"
+  />
+
+  <div class="shell-main">
+    <app-navbar />
+    <main class="shell-content">
+      <router-outlet />
+    </main>
+  </div>
+</div>
+
+<app-toast-container />

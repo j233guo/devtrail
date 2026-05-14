@@ -1,0 +1,33 @@
+/* Defines reusable shell and page layout primitives. */
+.app-shell {
+  min-height: 100dvh;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.page-container {
+  width: min(100%, 1120px);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.page-header {
+  display: grid;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xl);
+}
+
+.page-title {
+  margin: 0;
+  color: var(--color-text);
+  font-size: clamp(2.75rem, 10vw, 5.75rem);
+  font-weight: 800;
+  line-height: 0.98;
+}
+
+.page-subtitle {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  line-height: 1.6;
+}

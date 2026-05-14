@@ -1,0 +1,86 @@
+:host {
+  display: block;
+  height: 100%;
+  min-height: 0;
+}
+
+/* Groups tasks for a single board status. */
+.task-column {
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+h3 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 1rem;
+}
+
+header span {
+  min-width: 28px;
+  min-height: 28px;
+  display: inline-grid;
+  place-items: center;
+  color: var(--color-text-muted);
+  background: var(--color-surface-elevated);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-xl);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.task-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  align-content: start;
+  gap: var(--space-md);
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-right: 2px;
+  scrollbar-color: color-mix(in srgb, var(--color-text-muted) 34%, transparent) transparent;
+  scrollbar-width: thin;
+}
+
+.task-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.task-list::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color-text-muted) 26%, transparent);
+  border-radius: var(--radius-xl);
+}
+
+.task-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.empty-column {
+  margin: 0;
+  padding: var(--space-lg);
+  color: var(--color-text-muted);
+  text-align: center;
+  border: var(--border-width) dashed var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+@media (max-width: 1120px) {
+  .task-column {
+    max-height: 420px;
+  }
+}

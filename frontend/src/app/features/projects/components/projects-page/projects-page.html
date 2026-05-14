@@ -1,0 +1,106 @@
+
+<section class="projects-page">
+  <div class="projects-toolbar">
+    <button class="dt-button dt-button-primary" type="button" (click)="openCreateModal()">
+      New Project
+    </button>
+
+    <div class="toolbar-actions">
+      <button class="dt-button" type="button">Search</button>
+      <button class="dt-button" type="button">Sort</button>
+      <button class="dt-button" type="button">Filter</button>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <p class="inline-error">{{ errorMessage() }}</p>
+  }
+
+  @if (isLoading()) {
+    <div class="dt-card empty-state">
+      <p>Loading projects...</p>
+    </div>
+  } @else if (projects().length === 0) {
+    <div class="dt-card empty-state">
+      <h2>No projects yet</h2>
+      <p>Create your first project to start organizing DevTrail work.</p>
+      <button class="dt-button dt-button-primary" type="button" (click)="openCreateModal()">
+        New Project
+      </button>
+    </div>
+  } @else {
+    @if (activeProjects().length === 0) {
+      <div class="dt-card empty-state empty-state--compact">
+        <h2>No active projects</h2>
+        <p>Archived projects are available below.</p>
+      </div>
+    } @else {
+      <div class="projects-grid">
+        @for (project of activeProjects(); track project.id) {
+          <app-project-card
+            [project]="project"
+            (edit)="openEditModal($event)"
+            (delete)="openDeleteDialog($event)"
+          />
+        }
+      </div>
+    }
+
+    <section class="archived-projects">
+      <button type="button" class="archived-projects-header" (click)="toggleArchivedProjects()">
+        <span>Archived Projects ({{ archivedProjects().length }})</span>
+        <span>{{ isArchivedExpanded() ? 'Hide' : 'Show' }}</span>
+      </button>
+
+      <div class="archived-projects-content" [class.archived-projects-content--expanded]="isArchivedExpanded()">
+        @if (archivedProjects().length === 0) {
+          <div class="dt-card archived-empty">
+            <p>No archived projects.</p>
+          </div>
+        } @else {
+          <div class="projects-grid projects-grid--archived">
+            @for (project of archivedProjects(); track project.id) {
+              <app-project-card
+                [project]="project"
+                (edit)="openEditModal($event)"
+                (delete)="openDeleteDialog($event)"
+              />
+            }
+          </div>
+        }
+      </div>
+    </section>
+  }
+</section>
+
+@if (isCreateModalOpen()) {
+  <app-modal [open]="true" title="Create project" (closeRequest)="closeCreateModal()">
+    <app-project-form
+      submitLabel="Create project"
+      (formSubmit)="createProject($event)"
+      (cancel)="closeCreateModal()"
+    />
+  </app-modal>
+}
+
+@if (isEditModalOpen()) {
+  <app-modal [open]="true" title="Edit project" (closeRequest)="closeEditModal()">
+    <app-project-form
+      [initialProject]="selectedProject()"
+      submitLabel="Save changes"
+      (formSubmit)="updateProject($event)"
+      (cancel)="closeEditModal()"
+    />
+  </app-modal>
+}
+
+<app-confirm-dialog
+  [open]="isConfirmDeleteOpen()"
+  title="Delete project"
+  [message]="'Delete ' + (projectPendingDeletion()?.name ?? 'this project') + '?'"
+  confirmLabel="Delete"
+  cancelLabel="Cancel"
+  [danger]="true"
+  (confirm)="confirmDeleteProject()"
+  (cancel)="closeDeleteDialog()"
+/>

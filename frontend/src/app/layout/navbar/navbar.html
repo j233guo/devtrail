@@ -1,0 +1,20 @@
+<header class="navbar">
+  @if (pageDisplay().backLink) {
+    <a class="navbar-back" [routerLink]="pageDisplay().backLink" aria-label="Go back">←</a>
+  }
+
+  <div class="navbar-copy">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      @for (crumb of pageDisplay().crumbs; track crumb; let isLast = $last) {
+        <span [class.breadcrumb-current]="isLast">{{ crumb }}</span>
+        @if (!isLast) {
+          <span>/</span>
+        }
+      }
+    </nav>
+    <div class="title-row">
+      <h1>{{ pageDisplay().title }}</h1>
+      <p>{{ pageDisplay().subtitle }}</p>
+    </div>
+  </div>
+</header>

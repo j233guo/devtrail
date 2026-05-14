@@ -1,0 +1,19 @@
+<section class="dashboard-grid">
+  <article class="dt-card welcome-card">
+    <p class="eyebrow">Local workspace</p>
+    <h2>Welcome to DevTrail</h2>
+    <p>
+      A focused place for local-first project planning, task flow, and development context.
+    </p>
+  </article>
+
+  <div class="metric-grid">
+    @for (metric of metrics(); track metric.label) {
+      <article class="dt-card metric-card">
+        <span>{{ metric.label }}</span>
+        <strong>{{ metric.value }}</strong>
+        <p>{{ metric.description }}</p>
+      </article>
+    }
+  </div>
+</section>

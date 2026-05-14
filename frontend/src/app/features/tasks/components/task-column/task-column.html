@@ -1,0 +1,24 @@
+<section class="task-column">
+  <header>
+    <h3>{{ title() }}</h3>
+    <span>{{ tasks().length }}</span>
+  </header>
+
+  <div class="task-list">
+    @if (tasks().length === 0) {
+      <p class="empty-column">No tasks here yet.</p>
+    } @else {
+      @for (task of tasks(); track task.id) {
+        <app-task-card
+          [task]="task"
+          (edit)="edit.emit($event)"
+          (delete)="delete.emit($event)"
+          (archive)="archive.emit($event)"
+          (markTodo)="requestStatusChange($event, 'todo')"
+          (markInProgress)="requestStatusChange($event, 'in_progress')"
+          (markDone)="requestStatusChange($event, 'done')"
+        />
+      }
+    }
+  </div>
+</section>

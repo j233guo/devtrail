@@ -1,0 +1,115 @@
+<aside class="dt-card sidebar" [class.sidebar--collapsed]="isCollapsed()">
+  <div class="sidebar-top">
+    @if (!isCollapsed()) {
+      <a class="brand" routerLink="/dashboard" aria-label="DevTrail dashboard">
+        <span class="brand-mark">D</span>
+        <span class="brand-copy">
+          <strong>DevTrail</strong>
+          <span>Local workspace</span>
+        </span>
+      </a>
+    }
+
+    <button
+      class="icon-button"
+      type="button"
+      [attr.aria-label]="isCollapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
+      (click)="requestSidebarToggle()"
+    >
+      {{ isCollapsed() ? '>' : '<' }}
+    </button>
+  </div>
+
+  <nav class="sidebar-nav" aria-label="Primary navigation">
+    <a
+      class="nav-item"
+      routerLink="/dashboard"
+      routerLinkActive="nav-item--active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <span class="nav-icon">D</span>
+      @if (!isCollapsed()) {
+        <span>Dashboard</span>
+      }
+    </a>
+
+    <section class="projects-section" [class.projects-section--collapsed]="!isProjectsExpanded() || isCollapsed()">
+      <button class="nav-item nav-item--button" type="button" (click)="toggleProjects()">
+        <span class="nav-icon">P</span>
+        @if (!isCollapsed()) {
+          <span>Projects</span>
+          <span class="chevron" [class.chevron--open]="isProjectsExpanded()">v</span>
+        }
+      </button>
+
+      <div class="projects-content">
+        @if (projectsService.recent_projects().length > 0) {
+          @for (project of projectsService.recent_projects(); track project.id) {
+            <a
+              class="project-link"
+              [class.project-link--active]="projectsService.active_project_id() === project.id"
+              [routerLink]="['/projects', project.id]"
+            >
+              <span>{{ project.name }}</span>
+              <small>{{ project.status }}</small>
+            </a>
+          }
+        } @else {
+          <p class="project-link project-link--empty">
+            <span>No recent projects</span>
+          </p>
+        }
+
+        <a
+          class="project-link project-link--all"
+          routerLink="/projects"
+          routerLinkActive="project-link--active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <span>All projects</span>
+        </a>
+      </div>
+    </section>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <section class="health-panel" aria-live="polite">
+      @if (!isCollapsed()) {
+        <h2>Server health</h2>
+      }
+
+      @if (isHealthLoading()) {
+        <p class="health-message">Checking...</p>
+      } @else if (healthError()) {
+        <p class="health-message health-message--error">{{ healthError() }}</p>
+      } @else {
+        <div class="health-row">
+          <span class="health-dot"></span>
+          @if (!isCollapsed()) {
+            <span>Backend</span>
+            <strong>{{ backendHealth()?.status ?? 'unknown' }}</strong>
+          }
+        </div>
+        <div class="health-row">
+          <span class="health-dot"></span>
+          @if (!isCollapsed()) {
+            <span>Database</span>
+            <strong>{{ dbHealth()?.database ?? 'unknown' }}</strong>
+          }
+        </div>
+      }
+    </section>
+
+    <a
+      class="nav-item"
+      routerLink="/settings"
+      routerLinkActive="nav-item--active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <span class="nav-icon">S</span>
+      @if (!isCollapsed()) {
+        <span>Settings</span>
+      }
+    </a>
+  </div>
+</aside>

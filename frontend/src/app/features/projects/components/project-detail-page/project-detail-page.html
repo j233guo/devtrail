@@ -1,0 +1,55 @@
+@if (isLoading()) {
+  <section class="project-detail-state">
+    <p>Loading project...</p>
+  </section>
+} @else if (errorMessage()) {
+  <section class="dt-card project-detail-state">
+    <h2>Project not found</h2>
+    <p>{{ errorMessage() }}</p>
+  </section>
+} @else if (project(); as activeProject) {
+  <section class="project-detail">
+    <header class="project-summary">
+      <div class="summary-meta">
+        <span
+          class="status-pill"
+          [class.status-pill--active]="activeProject.status === 'active'"
+          [class.status-pill--paused]="activeProject.status === 'paused'"
+          [class.status-pill--completed]="activeProject.status === 'completed'"
+          [class.status-pill--archived]="activeProject.status === 'archived'"
+        >
+          {{ activeProject.status }}
+        </span>
+        @if (activeProject.tech_stack.length > 0) {
+          <div class="tech-stack" aria-label="Tech stack">
+            @for (tech of activeProject.tech_stack; track tech) {
+              <span>{{ tech }}</span>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="project-summary-actions">
+        @if (activeProject.description) {
+          <p>{{ activeProject.description }}</p>
+        }
+        <button class="dt-button dt-button-primary" type="button" (click)="openEditModal()">
+          Edit Project
+        </button>
+      </div>
+    </header>
+
+    <app-task-board [project_id]="activeProject.id" />
+  </section>
+}
+
+@if (isEditModalOpen()) {
+  <app-modal [open]="true" title="Edit project" (closeRequest)="closeEditModal()">
+    <app-project-form
+      [initialProject]="project()"
+      submitLabel="Save changes"
+      (formSubmit)="updateProject($event)"
+      (cancel)="closeEditModal()"
+    />
+  </app-modal>
+}

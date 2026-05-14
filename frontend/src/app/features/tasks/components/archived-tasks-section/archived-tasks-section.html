@@ -1,0 +1,26 @@
+<section class="archived-section">
+  <button type="button" class="archived-header" (click)="requestToggle()">
+    <span>Archived Tasks ({{ tasks().length }})</span>
+    <span>{{ isExpanded() ? 'Hide' : 'Show' }}</span>
+  </button>
+
+  @if (isExpanded()) {
+    <div class="archived-list">
+      @if (tasks().length === 0) {
+        <p>No archived tasks.</p>
+      } @else {
+        @for (task of tasks(); track task.id) {
+          <app-task-card
+            [task]="task"
+            (edit)="edit.emit($event)"
+            (delete)="delete.emit($event)"
+            (markTodo)="restore.emit($event)"
+            (markInProgress)="restore.emit($event)"
+            (markDone)="restore.emit($event)"
+            (archive)="restore.emit($event)"
+          />
+        }
+      }
+    </div>
+  }
+</section>

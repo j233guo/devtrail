@@ -1,0 +1,55 @@
+:host {
+  display: block;
+  height: 100%;
+  min-height: 0;
+}
+
+.task-workspace-page {
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
+  gap: var(--space-lg);
+}
+
+.workspace-main {
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: var(--space-xs);
+}
+
+.workspace-state {
+  min-height: 320px;
+  display: grid;
+  align-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-xl);
+}
+
+.workspace-state h2,
+.workspace-state p {
+  margin: 0;
+}
+
+.workspace-state h2 {
+  color: var(--color-text);
+  font-size: 1.45rem;
+}
+
+.workspace-state p {
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+@media (max-width: 1080px) {
+  .task-workspace-page {
+    height: auto;
+    grid-template-columns: 1fr;
+  }
+
+  .workspace-main {
+    overflow: visible;
+    padding-right: 0;
+  }
+}

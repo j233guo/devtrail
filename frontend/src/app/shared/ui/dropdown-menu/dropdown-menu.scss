@@ -1,0 +1,56 @@
+/* Anchors a compact projected action menu to its trigger. */
+.dropdown {
+  position: relative;
+  display: inline-flex;
+}
+
+.dropdown-trigger {
+  min-height: 34px;
+  padding: 0 var(--space-sm);
+  color: var(--color-text-muted);
+  background: var(--color-surface-elevated);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.dropdown-panel {
+  position: absolute;
+  top: calc(100% + var(--space-xs));
+  right: 0;
+  z-index: 5;
+  min-width: 148px;
+  display: grid;
+  gap: 2px;
+  padding: var(--space-xs);
+  background: var(--color-surface-elevated);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+}
+
+::ng-deep .dropdown-panel button {
+  width: 100%;
+  min-height: 34px;
+  padding: 0 var(--space-sm);
+  color: var(--color-text);
+  text-align: left;
+  white-space: nowrap;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+::ng-deep .dropdown-panel button:hover {
+  background: color-mix(in srgb, var(--color-text-muted) 10%, transparent);
+}
+
+::ng-deep .dropdown-panel .dropdown-action-danger {
+  color: var(--color-danger);
+}
+
+::ng-deep .dropdown-panel .dropdown-action-danger:hover {
+  color: var(--color-bg);
+  background: var(--color-danger);
+}

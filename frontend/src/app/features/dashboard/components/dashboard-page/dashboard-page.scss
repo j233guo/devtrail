@@ -1,0 +1,71 @@
+:host {
+  display: block;
+}
+
+/* Lays out dashboard welcome and planning placeholders. */
+.dashboard-grid {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.welcome-card,
+.metric-card {
+  padding: var(--space-xl);
+}
+
+.eyebrow {
+  margin: 0 0 var(--space-sm);
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.welcome-card h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1;
+}
+
+.welcome-card p,
+.metric-card p {
+  max-width: 42rem;
+  margin: var(--space-md) 0 0;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+/* Keeps dashboard cards responsive for the shell content width. */
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-lg);
+}
+
+.metric-card {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.metric-card span {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.metric-card strong {
+  color: var(--color-text);
+  font-size: 1.6rem;
+}
+
+.metric-card p {
+  margin: 0;
+}
+
+@media (max-width: 960px) {
+  .metric-grid {
+    grid-template-columns: 1fr;
+  }
+}

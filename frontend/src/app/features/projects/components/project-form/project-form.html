@@ -1,0 +1,55 @@
+<form class="project-form" (submit)="submitForm(); $event.preventDefault()">
+  <label>
+    <span>Name</span>
+    <input
+      type="text"
+      [value]="name()"
+      (input)="updateName($event)"
+      (blur)="markNameTouched()"
+      placeholder="Project name"
+      autocomplete="off"
+    />
+    @if (shouldShowNameError()) {
+      <small>Name is required.</small>
+    }
+  </label>
+
+  <label>
+    <span>Description</span>
+    <textarea
+      rows="4"
+      [value]="description()"
+      (input)="updateDescription($event)"
+      placeholder="What is this project for?"
+    ></textarea>
+  </label>
+
+  <label>
+    <span>Tech stack</span>
+    <input
+      type="text"
+      [value]="techStackText()"
+      (input)="updateTechStack($event)"
+      placeholder="Angular, Fastify, SQLite"
+    />
+  </label>
+
+  <label>
+    <span>Status</span>
+    <select [value]="status()" (change)="updateStatus($event)" (blur)="markStatusTouched()">
+      @for (option of statusOptions; track option.value) {
+        <option [value]="option.value" [selected]="option.value === status()">{{ option.label }}</option>
+      }
+    </select>
+    @if (shouldShowStatusError()) {
+      <small>Status is required.</small>
+    }
+  </label>
+
+  <div class="form-actions">
+    <button class="dt-button" type="button" (click)="cancelForm()">Cancel</button>
+    <button class="dt-button dt-button-primary" type="submit" [disabled]="!isFormValid()">
+      {{ submitLabel() }}
+    </button>
+  </div>
+</form>

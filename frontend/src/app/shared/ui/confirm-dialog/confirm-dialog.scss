@@ -1,0 +1,29 @@
+/* Keeps confirm dialog copy and actions compact inside the modal shell. */
+.confirm-dialog {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.confirm-dialog p {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+}
+
+.confirm-danger {
+  color: var(--color-bg);
+  background: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+@media (max-width: 520px) {
+  .confirm-actions {
+    flex-direction: column-reverse;
+  }
+}

@@ -1,0 +1,135 @@
+/* Lays out the Projects list page without adding a detail view yet. */
+.projects-page {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.projects-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+}
+
+.inline-error {
+  margin: 0;
+  padding: var(--space-sm) var(--space-md);
+  color: var(--color-danger);
+  background: color-mix(in srgb, var(--color-danger) 10%, transparent);
+  border: var(--border-width) solid color-mix(in srgb, var(--color-danger) 28%, transparent);
+  border-radius: var(--radius-md);
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-lg);
+}
+
+.empty-state {
+  min-height: 280px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  justify-items: center;
+  gap: var(--space-md);
+  padding: var(--space-xl);
+  text-align: center;
+}
+
+.empty-state--compact {
+  min-height: 180px;
+}
+
+.empty-state h2,
+.empty-state p {
+  margin: 0;
+}
+
+.empty-state h2 {
+  color: var(--color-text);
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+}
+
+.empty-state p {
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+/* Keeps archived projects separate from the primary active grid. */
+.archived-projects {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.archived-projects-header {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: 0 var(--space-md);
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+}
+
+.archived-projects-content {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    max-height 180ms ease,
+    opacity 180ms ease;
+}
+
+.archived-projects-content--expanded {
+  max-height: 1200px;
+  opacity: 1;
+}
+
+.projects-grid--archived {
+  opacity: 0.78;
+}
+
+.archived-empty {
+  min-height: 140px;
+  display: grid;
+  place-items: center;
+  padding: var(--space-lg);
+  color: var(--color-text-muted);
+}
+
+.archived-empty p {
+  margin: 0;
+}
+
+@media (max-width: 680px) {
+  .projects-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .toolbar-actions {
+    justify-content: stretch;
+  }
+
+  .toolbar-actions .dt-button {
+    flex: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .archived-projects-content {
+    transition: none;
+  }
+}

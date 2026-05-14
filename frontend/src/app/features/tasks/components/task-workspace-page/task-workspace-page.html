@@ -1,0 +1,23 @@
+@if (isLoading()) {
+  <section class="workspace-state">
+    <p>Loading task workspace...</p>
+  </section>
+} @else if (errorMessage()) {
+  <section class="dt-card workspace-state">
+    <h2>Task not found</h2>
+    <p>{{ errorMessage() }}</p>
+  </section>
+} @else if (task(); as activeTask) {
+  <section class="task-workspace-page">
+    <main class="workspace-main">
+      <app-task-main-workspace
+        [task]="activeTask"
+        [saveStatus]="saveStatus()"
+        (dirtyChange)="markDirty($event)"
+        (save)="saveTask($event)"
+      />
+    </main>
+
+    <app-task-ai-panel />
+  </section>
+}
