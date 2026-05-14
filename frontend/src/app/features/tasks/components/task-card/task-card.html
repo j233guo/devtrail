@@ -1,18 +1,36 @@
 <article class="task-card" [class.task-card--archived]="task().status === TaskStatus.Archived">
   <header>
     <div>
-      <span class="priority-pill">{{ task().priority }}</span>
+      <div class="task-badges">
+        <span
+          class="priority-pill"
+          [class.priority-pill--low]="task().priority === 'low'"
+          [class.priority-pill--medium]="task().priority === 'medium'"
+          [class.priority-pill--high]="task().priority === 'high'"
+        >
+          {{ task().priority }}
+        </span>
+        <span class="status-pill">{{ task().status }}</span>
+      </div>
       <h3>{{ task().title }}</h3>
     </div>
 
     <app-dropdown-menu triggerLabel="Actions">
       <button type="button" (click)="requestEdit()">Edit</button>
-      <button type="button" (click)="requestMarkTodo()">Move to Todo</button>
-      <button type="button" (click)="requestMarkInProgress()">Move to In Progress</button>
-      <button type="button" (click)="requestMarkDone()">Move to Done</button>
-      <button type="button" (click)="requestArchive()">
-        {{ task().status === TaskStatus.Archived ? 'Restore to Todo' : 'Archive' }}
-      </button>
+      @if (task().status === TaskStatus.Archived) {
+        <button type="button" (click)="requestArchive()">Restore to Todo</button>
+      } @else {
+        @if (task().status !== TaskStatus.Todo) {
+          <button type="button" (click)="requestMarkTodo()">To Todo</button>
+        }
+        @if (task().status !== TaskStatus.InProgress) {
+          <button type="button" (click)="requestMarkInProgress()">To Progress</button>
+        }
+        @if (task().status !== TaskStatus.Done) {
+          <button type="button" (click)="requestMarkDone()">To Done</button>
+        }
+        <button type="button" (click)="requestArchive()">Archive</button>
+      }
       <button class="dropdown-action-danger" type="button" (click)="requestDelete()">Delete</button>
     </app-dropdown-menu>
   </header>

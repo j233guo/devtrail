@@ -5,7 +5,15 @@
 >
   <header class="project-header">
     <div>
-      <span class="status-pill">{{ project().status }}</span>
+      <span
+        class="status-pill"
+        [class.status-pill--active]="project().status === 'active'"
+        [class.status-pill--paused]="project().status === 'paused'"
+        [class.status-pill--completed]="project().status === 'completed'"
+        [class.status-pill--archived]="project().status === 'archived'"
+      >
+        {{ project().status }}
+      </span>
       <h2>{{ project().name }}</h2>
     </div>
 

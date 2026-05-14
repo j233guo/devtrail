@@ -1,7 +1,7 @@
 /* Defines small reusable component primitives for DevTrail surfaces. */
 .dt-card {
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
 }
@@ -10,11 +10,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 40px;
-  padding: 0 var(--space-md);
+  min-height: 36px;
+  padding: 0 var(--space-sm);
   color: var(--color-text);
   background: var(--color-surface-elevated);
-  border: 1px solid var(--color-border);
+  border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-md);
   cursor: pointer;
 }
@@ -37,6 +37,6 @@
   padding: var(--space-xs) var(--space-sm);
   color: var(--color-text-muted);
   background: var(--color-surface-elevated);
-  border: 1px solid var(--color-border);
+  border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-xl);
 }

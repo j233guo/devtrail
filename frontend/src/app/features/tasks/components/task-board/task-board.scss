@@ -9,7 +9,7 @@
   height: 100%;
   min-height: 0;
   display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  grid-template-rows: auto auto minmax(0, 1fr);
   gap: var(--space-md);
 }
 
@@ -27,12 +27,18 @@
   gap: var(--space-sm);
 }
 
+.toolbar-primary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
 .inline-error {
   margin: 0;
   padding: var(--space-sm) var(--space-md);
   color: var(--color-danger);
   background: var(--color-danger-surface);
-  border: 1px solid color-mix(in srgb, var(--color-danger) 28%, transparent);
+  border: var(--border-width) solid color-mix(in srgb, var(--color-danger) 28%, transparent);
   border-radius: var(--radius-md);
 }
 
@@ -46,6 +52,8 @@
 
 /* Shows active task statuses as responsive board columns. */
 .board-columns {
+  height: 100%;
+  max-height: clamp(420px, calc(100dvh - 260px), 720px);
   min-height: 0;
   display: grid;
   grid-template-columns: repeat(3, minmax(240px, 1fr));
@@ -53,9 +61,57 @@
   overflow: hidden;
 }
 
+.board-columns app-task-column {
+  min-height: 0;
+  height: 100%;
+}
+
+/* Keeps archived tasks inside the modal instead of stretching the page. */
+.archived-modal-body {
+  min-height: min(520px, calc(100dvh - 220px));
+  display: grid;
+}
+
+.archived-modal-grid {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  align-content: start;
+  gap: var(--space-md);
+}
+
+.archived-empty {
+  min-height: 320px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: var(--space-xs);
+  padding: var(--space-xl);
+  color: var(--color-text-muted);
+  text-align: center;
+  border: var(--border-width) dashed var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.archived-empty h3,
+.archived-empty p {
+  margin: 0;
+}
+
+.archived-empty h3 {
+  color: var(--color-text);
+}
+
 @media (max-width: 1120px) {
   .board-columns {
     grid-template-columns: 1fr;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .board-columns app-task-column {
+    height: 420px;
   }
 }
 
@@ -69,6 +125,11 @@
     justify-content: stretch;
   }
 
+  .toolbar-primary {
+    flex-direction: column;
+  }
+
+  .toolbar-primary .dt-button,
   .toolbar-actions .dt-button {
     flex: 1;
   }

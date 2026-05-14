@@ -3,7 +3,7 @@ import { Component, computed, effect, inject, input, signal } from '@angular/cor
 import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog';
 import { ModalComponent } from '../../../../shared/ui/modal/modal';
 import { ToastService } from '../../../../shared/ui/toast/toast.service';
-import { ArchivedTasksSectionComponent } from '../archived-tasks-section/archived-tasks-section';
+import { TaskCardComponent } from '../task-card/task-card';
 import { TaskColumnComponent } from '../task-column/task-column';
 import { TaskFormComponent } from '../task-form/task-form';
 import { type ITask, type ITaskPayload, TaskStatus, TasksService } from '../../services/tasks.service';
@@ -11,9 +11,9 @@ import { type ITask, type ITaskPayload, TaskStatus, TasksService } from '../../s
 @Component({
   selector: 'app-task-board',
   imports: [
-    ArchivedTasksSectionComponent,
     ConfirmDialogComponent,
     ModalComponent,
+    TaskCardComponent,
     TaskColumnComponent,
     TaskFormComponent,
   ],
@@ -35,7 +35,7 @@ export class TaskBoardComponent {
   protected readonly selectedTask = signal<ITask | null>(null);
   protected readonly isConfirmDeleteOpen = signal(false);
   protected readonly taskPendingDeletion = signal<ITask | null>(null);
-  protected readonly isArchivedExpanded = signal(false);
+  protected readonly isArchivedModalOpen = signal(false);
   protected readonly TaskStatus = TaskStatus;
   protected readonly todoTasks = computed(() => this.tasksForStatus(TaskStatus.Todo));
   protected readonly inProgressTasks = computed(() => this.tasksForStatus(TaskStatus.InProgress));
@@ -67,6 +67,7 @@ export class TaskBoardComponent {
   // Opens the edit task modal with the selected task.
   protected openEditModal(task: ITask): void {
     this.errorMessage.set(null);
+    this.isArchivedModalOpen.set(false);
     this.selectedTask.set(task);
     this.isEditModalOpen.set(true);
   }
@@ -80,6 +81,7 @@ export class TaskBoardComponent {
   // Opens delete confirmation for a selected task.
   protected openDeleteDialog(task: ITask): void {
     this.errorMessage.set(null);
+    this.isArchivedModalOpen.set(false);
     this.taskPendingDeletion.set(task);
     this.isConfirmDeleteOpen.set(true);
   }
@@ -90,9 +92,14 @@ export class TaskBoardComponent {
     this.taskPendingDeletion.set(null);
   }
 
-  // Toggles visibility for archived tasks.
-  protected toggleArchived(): void {
-    this.isArchivedExpanded.update((isExpanded) => !isExpanded);
+  // Opens the archived tasks modal.
+  protected openArchivedModal(): void {
+    this.isArchivedModalOpen.set(true);
+  }
+
+  // Closes the archived tasks modal.
+  protected closeArchivedModal(): void {
+    this.isArchivedModalOpen.set(false);
   }
 
   // Creates a task and refreshes the board.

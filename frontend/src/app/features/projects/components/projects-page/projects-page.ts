@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 
 import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog';
 import { ModalComponent } from '../../../../shared/ui/modal/modal';
@@ -29,6 +29,13 @@ export class ProjectsPage implements OnInit {
   protected readonly selectedProject = signal<IProject | null>(null);
   protected readonly isConfirmDeleteOpen = signal(false);
   protected readonly projectPendingDeletion = signal<IProject | null>(null);
+  protected readonly isArchivedExpanded = signal(false);
+  protected readonly activeProjects = computed(() =>
+    this.projects().filter((project) => project.status !== 'archived'),
+  );
+  protected readonly archivedProjects = computed(() =>
+    this.projects().filter((project) => project.status === 'archived'),
+  );
 
   // Loads projects when the routed page is initialized.
   ngOnInit(): void {
@@ -70,6 +77,11 @@ export class ProjectsPage implements OnInit {
   protected closeDeleteDialog(): void {
     this.isConfirmDeleteOpen.set(false);
     this.projectPendingDeletion.set(null);
+  }
+
+  // Toggles visibility for archived projects.
+  protected toggleArchivedProjects(): void {
+    this.isArchivedExpanded.update((isExpanded) => !isExpanded);
   }
 
   // Creates a project and refreshes the project list.

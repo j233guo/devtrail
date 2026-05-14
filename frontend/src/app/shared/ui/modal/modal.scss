@@ -12,13 +12,13 @@
 
 /* Presents modal content as a large floating card. */
 .modal-panel {
-  width: min(100%, 680px);
+  width: min(100%, 860px);
   max-height: min(780px, calc(100dvh - (var(--space-lg) * 2)));
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   overflow: hidden;
   background: var(--color-surface-elevated);
-  border: 1px solid var(--color-border);
+  border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-card);
 }
@@ -28,8 +28,8 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-lg);
-  padding: var(--space-lg);
-  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: var(--border-width) solid var(--color-border);
 }
 
 .modal-header h2 {
@@ -45,7 +45,7 @@
   place-items: center;
   color: var(--color-text-muted);
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-md);
   cursor: pointer;
 }
@@ -53,5 +53,5 @@
 .modal-content {
   min-height: 0;
   overflow: auto;
-  padding: var(--space-lg);
+  padding: var(--space-md) var(--space-lg);
 }

@@ -10,26 +10,33 @@
 } @else if (project(); as activeProject) {
   <section class="project-detail">
     <header class="project-summary">
-      <div>
-        <div class="summary-meta">
-          <span class="status-pill">{{ activeProject.status }}</span>
-          @if (activeProject.tech_stack.length > 0) {
-            <div class="tech-stack" aria-label="Tech stack">
-              @for (tech of activeProject.tech_stack; track tech) {
-                <span>{{ tech }}</span>
-              }
-            </div>
-          }
-        </div>
-        <h2>{{ activeProject.name }}</h2>
-        @if (activeProject.description) {
-          <p>{{ activeProject.description }}</p>
+      <div class="summary-meta">
+        <span
+          class="status-pill"
+          [class.status-pill--active]="activeProject.status === 'active'"
+          [class.status-pill--paused]="activeProject.status === 'paused'"
+          [class.status-pill--completed]="activeProject.status === 'completed'"
+          [class.status-pill--archived]="activeProject.status === 'archived'"
+        >
+          {{ activeProject.status }}
+        </span>
+        @if (activeProject.tech_stack.length > 0) {
+          <div class="tech-stack" aria-label="Tech stack">
+            @for (tech of activeProject.tech_stack; track tech) {
+              <span>{{ tech }}</span>
+            }
+          </div>
         }
       </div>
 
-      <button class="dt-button dt-button-primary" type="button" (click)="openEditModal()">
-        Edit Project
-      </button>
+      <div class="project-summary-actions">
+        @if (activeProject.description) {
+          <p>{{ activeProject.description }}</p>
+        }
+        <button class="dt-button dt-button-primary" type="button" (click)="openEditModal()">
+          Edit Project
+        </button>
+      </div>
     </header>
 
     <app-task-board [project_id]="activeProject.id" />

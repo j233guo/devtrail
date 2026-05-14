@@ -1,8 +1,13 @@
 <section class="task-board">
   <div class="task-toolbar">
-    <button class="dt-button dt-button-primary" type="button" (click)="openCreateModal()">
-      New Task
-    </button>
+    <div class="toolbar-primary">
+      <button class="dt-button dt-button-primary" type="button" (click)="openCreateModal()">
+        New Task
+      </button>
+      <button class="dt-button" type="button" (click)="openArchivedModal()">
+        Archived Tasks ({{ archivedTasks().length }})
+      </button>
+    </div>
 
     <div class="toolbar-actions">
       <button class="dt-button" type="button">Search</button>
@@ -51,15 +56,6 @@
         (statusChange)="changeTaskStatus($event)"
       />
     </div>
-
-    <app-archived-tasks-section
-      [tasks]="archivedTasks()"
-      [isExpanded]="isArchivedExpanded()"
-      (toggle)="toggleArchived()"
-      (edit)="openEditModal($event)"
-      (delete)="openDeleteDialog($event)"
-      (restore)="restoreTask($event)"
-    />
   }
 </section>
 
@@ -81,6 +77,33 @@
       (formSubmit)="updateTask($event)"
       (cancel)="closeEditModal()"
     />
+  </app-modal>
+}
+
+@if (isArchivedModalOpen()) {
+  <app-modal [open]="true" title="Archived tasks" (closeRequest)="closeArchivedModal()">
+    <section class="archived-modal-body">
+      @if (archivedTasks().length === 0) {
+        <div class="archived-empty">
+          <h3>No archived tasks</h3>
+          <p>Archived tasks will appear here.</p>
+        </div>
+      } @else {
+        <div class="archived-modal-grid">
+          @for (task of archivedTasks(); track task.id) {
+            <app-task-card
+              [task]="task"
+              (edit)="openEditModal($event)"
+              (delete)="openDeleteDialog($event)"
+              (archive)="restoreTask($event)"
+              (markTodo)="restoreTask($event)"
+              (markInProgress)="changeTaskStatus({ task: $event, status: TaskStatus.InProgress })"
+              (markDone)="changeTaskStatus({ task: $event, status: TaskStatus.Done })"
+            />
+          }
+        </div>
+      }
+    </section>
   </app-modal>
 }
 

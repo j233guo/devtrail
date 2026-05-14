@@ -1,10 +1,10 @@
 /* Styles a slim navbar that blends into the main content area. */
 .navbar {
-  min-height: 64px;
+  min-height: 48px;
   display: flex;
   align-items: center;
-  gap: var(--space-lg);
-  padding: var(--space-sm) 0;
+  gap: var(--space-md);
+  padding: var(--space-xs) 0;
 }
 
 .navbar-back {
@@ -15,9 +15,13 @@
   place-items: center;
   color: var(--color-text);
   background: var(--color-surface-elevated);
-  border: 1px solid var(--color-border);
+  border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-md);
   text-decoration: none;
+}
+
+.navbar-copy {
+  min-width: 0;
 }
 
 .breadcrumbs {
@@ -34,22 +38,34 @@
   font-weight: 700;
 }
 
+.title-row {
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-md);
+}
+
 .navbar h1 {
   margin: 0;
   color: var(--color-text);
-  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-size: clamp(1.25rem, 2.2vw, 1.65rem);
   line-height: 1.1;
 }
 
 .navbar p {
-  margin: var(--space-xs) 0 0;
+  margin: 0;
   color: var(--color-text-muted);
-  line-height: 1.5;
+  line-height: 1.35;
 }
 
 @media (max-width: 640px) {
   .navbar {
+    align-items: center;
+  }
+
+  .title-row {
     align-items: flex-start;
     flex-direction: column;
+    gap: 2px;
   }
 }

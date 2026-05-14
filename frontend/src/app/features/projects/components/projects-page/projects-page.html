@@ -29,15 +29,47 @@
       </button>
     </div>
   } @else {
-    <div class="projects-grid">
-      @for (project of projects(); track project.id) {
-        <app-project-card
-          [project]="project"
-          (edit)="openEditModal($event)"
-          (delete)="openDeleteDialog($event)"
-        />
-      }
-    </div>
+    @if (activeProjects().length === 0) {
+      <div class="dt-card empty-state empty-state--compact">
+        <h2>No active projects</h2>
+        <p>Archived projects are available below.</p>
+      </div>
+    } @else {
+      <div class="projects-grid">
+        @for (project of activeProjects(); track project.id) {
+          <app-project-card
+            [project]="project"
+            (edit)="openEditModal($event)"
+            (delete)="openDeleteDialog($event)"
+          />
+        }
+      </div>
+    }
+
+    <section class="archived-projects">
+      <button type="button" class="archived-projects-header" (click)="toggleArchivedProjects()">
+        <span>Archived Projects ({{ archivedProjects().length }})</span>
+        <span>{{ isArchivedExpanded() ? 'Hide' : 'Show' }}</span>
+      </button>
+
+      <div class="archived-projects-content" [class.archived-projects-content--expanded]="isArchivedExpanded()">
+        @if (archivedProjects().length === 0) {
+          <div class="dt-card archived-empty">
+            <p>No archived projects.</p>
+          </div>
+        } @else {
+          <div class="projects-grid projects-grid--archived">
+            @for (project of archivedProjects(); track project.id) {
+              <app-project-card
+                [project]="project"
+                (edit)="openEditModal($event)"
+                (delete)="openDeleteDialog($event)"
+              />
+            }
+          </div>
+        }
+      </div>
+    </section>
   }
 </section>
 
