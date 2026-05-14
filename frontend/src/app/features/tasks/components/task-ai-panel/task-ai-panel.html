@@ -1,0 +1,42 @@
+<aside class="task-ai-panel">
+  <header>
+    <h2>AI Tools</h2>
+    <p>Generated outputs will be saved to task history in a later phase.</p>
+  </header>
+
+  <label>
+    <span>Model</span>
+    <select [ngModel]="selectedModel()" (ngModelChange)="updateModel($event)">
+      @for (model of modelOptions; track model) {
+        <option [value]="model">{{ model }}</option>
+      }
+    </select>
+  </label>
+
+  <section class="ai-actions">
+    <h3>Actions</h3>
+    @for (action of actions; track action) {
+      <button
+        class="dt-button"
+        type="button"
+        [class.ai-action-active]="selectedAction() === action"
+        (click)="chooseAction(action)"
+      >
+        {{ action }}
+      </button>
+    }
+  </section>
+
+  <section class="output-panel">
+    <h3>Output</h3>
+    @if (selectedAction()) {
+      <p>{{ selectedAction() }} will appear here after AI generation is added.</p>
+    } @else {
+      <p>Select an action to preview the future output workspace.</p>
+    }
+  </section>
+
+  <p class="ai-note">
+    No AI request is sent from this panel yet.
+  </p>
+</aside>

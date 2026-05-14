@@ -2,13 +2,14 @@ import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { filter } from 'rxjs';
 import { ProjectsService } from '../../features/projects/services/projects.service';
+import { TasksService } from '../../features/tasks/services/tasks.service';
 
 // Represents display metadata for a routed page.
 interface IRouteDisplay {
   title: string;
   subtitle: string;
   crumbs: string[];
-  showBackToProjects: boolean;
+  backLink: string | null;
 }
 
 @Component({
@@ -20,6 +21,7 @@ interface IRouteDisplay {
 export class NavbarComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly projectsService = inject(ProjectsService);
+  private readonly tasksService = inject(TasksService);
 
   private readonly currentUrl = signal(this.router.url);
   protected readonly pageDisplay = computed(() => this.getRouteDisplay(this.currentUrl()));
@@ -34,16 +36,30 @@ export class NavbarComponent implements OnInit {
   // Maps the current URL to navbar title, subtitle, and actions.
   private getRouteDisplay(url: string): IRouteDisplay {
     if (url.startsWith('/projects')) {
+      const segments = url.split('?')[0].split('/').filter(Boolean);
+      const projectId = Number(segments[1]);
       const activeProject = this.projectsService
         .recent_projects()
-        .find((project) => project.id === this.projectsService.active_project_id());
+        .find((project) => project.id === this.projectsService.active_project_id() || project.id === projectId);
+
+      if (segments.length >= 4 && segments[2] === 'tasks') {
+        const projectName = activeProject?.name ?? 'Project';
+        const taskTitle = this.tasksService.active_task_title() ?? 'Task Workspace';
+
+        return {
+          title: taskTitle,
+          subtitle: 'Task workspace',
+          crumbs: ['Projects', projectName, taskTitle],
+          backLink: Number.isInteger(projectId) ? `/projects/${projectId}` : '/projects',
+        };
+      }
 
       if (activeProject && url !== '/projects') {
         return {
           title: activeProject.name,
           subtitle: 'Project workspace',
           crumbs: ['Projects', activeProject.name],
-          showBackToProjects: true,
+          backLink: '/projects',
         };
       }
 
@@ -51,7 +67,7 @@ export class NavbarComponent implements OnInit {
         title: 'Projects',
         subtitle: 'Project list and create UI will be added next.',
         crumbs: ['Projects'],
-        showBackToProjects: false,
+        backLink: null,
       };
     }
 
@@ -60,7 +76,7 @@ export class NavbarComponent implements OnInit {
         title: 'Settings',
         subtitle: 'Workspace preferences and theme controls will live here later.',
         crumbs: ['Settings'],
-        showBackToProjects: false,
+        backLink: null,
       };
     }
 
@@ -68,7 +84,7 @@ export class NavbarComponent implements OnInit {
       title: 'Dashboard',
       subtitle: 'Your local-first development workspace at a glance.',
       crumbs: ['Dashboard'],
-      showBackToProjects: false,
+      backLink: null,
     };
   }
 }

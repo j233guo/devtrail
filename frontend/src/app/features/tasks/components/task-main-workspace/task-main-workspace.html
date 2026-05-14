@@ -1,0 +1,91 @@
+<section class="task-main-workspace">
+  <header class="workspace-header">
+    <div>
+      <span
+        class="save-status"
+        [class.save-status--pending]="saveStatus() === 'saving' || saveStatus() === 'unsaved'"
+        [class.save-status--error]="saveStatus() === 'error'"
+      >
+        {{ saveStatusLabel() }}
+      </span>
+      <h2>Task Workspace</h2>
+    </div>
+
+    <button
+      class="dt-button dt-button-primary"
+      type="button"
+      [disabled]="isSaveDisabled"
+      (click)="requestSave()"
+    >
+      Save
+    </button>
+  </header>
+
+  <section class="workspace-card">
+    <h3>Task Summary</h3>
+
+    <label>
+      <span>Title</span>
+      <input
+        type="text"
+        [ngModel]="title()"
+        (ngModelChange)="updateTitle($event)"
+        required
+      />
+    </label>
+
+    <div class="summary-grid">
+      <label>
+        <span>Status</span>
+        <select [ngModel]="status()" (ngModelChange)="updateStatus($event)" required>
+          @for (option of statusOptions; track option) {
+            <option [value]="option">{{ option }}</option>
+          }
+        </select>
+      </label>
+
+      <label>
+        <span>Priority</span>
+        <select [ngModel]="priority()" (ngModelChange)="updatePriority($event)" required>
+          @for (option of priorityOptions; track option) {
+            <option [value]="option">{{ option }}</option>
+          }
+        </select>
+      </label>
+    </div>
+  </section>
+
+  <section class="workspace-card">
+    <h3>Description</h3>
+    <textarea
+      rows="8"
+      [ngModel]="description()"
+      (ngModelChange)="updateDescription($event)"
+    ></textarea>
+  </section>
+
+  <section class="workspace-card">
+    <h3>Acceptance Criteria</h3>
+    <textarea
+      rows="8"
+      [ngModel]="acceptance_criteria()"
+      (ngModelChange)="updateAcceptanceCriteria($event)"
+    ></textarea>
+  </section>
+
+  <section class="workspace-card placeholder-card">
+    <div>
+      <h3>Code Snippets</h3>
+      <p>Code snippets will be saved in a later phase.</p>
+    </div>
+    <button class="dt-button" type="button" disabled>Add Snippet</button>
+  </section>
+
+  <section class="workspace-card placeholder-card">
+    <div>
+      <h3>Decision Records</h3>
+      <p>Decision records will be saved in a later phase.</p>
+    </div>
+    <button class="dt-button" type="button" disabled>Add Decision</button>
+  </section>
+</section>

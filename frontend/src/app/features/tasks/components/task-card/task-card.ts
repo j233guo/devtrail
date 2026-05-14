@@ -1,4 +1,5 @@
-import { Component, input, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { DropdownMenuComponent } from '../../../../shared/ui/dropdown-menu/dropdown-menu';
 import { type ITask, TaskStatus } from '../../services/tasks.service';
@@ -10,6 +11,8 @@ import { type ITask, TaskStatus } from '../../services/tasks.service';
   styleUrl: './task-card.scss',
 })
 export class TaskCardComponent {
+  private readonly router = inject(Router);
+
   readonly task = input.required<ITask>();
   readonly edit = output<ITask>();
   readonly delete = output<ITask>();
@@ -18,6 +21,13 @@ export class TaskCardComponent {
   readonly markInProgress = output<ITask>();
   readonly markDone = output<ITask>();
   protected readonly TaskStatus = TaskStatus;
+
+  // Navigates to the editable task workspace.
+  protected openWorkspace(): void {
+    const task = this.task();
+
+    this.router.navigate(['/projects', task.project_id, 'tasks', task.id]);
+  }
 
   // Emits the task for parent-controlled editing.
   protected requestEdit(): void {

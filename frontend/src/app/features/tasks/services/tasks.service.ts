@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import type { Observable } from 'rxjs';
 
 import { type IApiResponse, NetworkService } from '../../../core/network/network.service';
@@ -50,6 +50,9 @@ export interface IDeleteTaskResult {
 })
 export class TasksService {
   private readonly networkService = inject(NetworkService);
+  private readonly activeTaskTitleState = signal<string | null>(null);
+
+  readonly active_task_title = this.activeTaskTitleState.asReadonly();
 
   // Loads all tasks for a project.
   listTasksByProjectId(project_id: number): Observable<IApiResponse<ITask[]>> {
@@ -77,5 +80,10 @@ export class TasksService {
   // Deletes an existing task by id.
   deleteTask(task_id: number): Observable<IApiResponse<IDeleteTaskResult>> {
     return this.networkService.delete<IDeleteTaskResult>(`/api/tasks/${task_id}`);
+  }
+
+  // Sets the active task title for route-aware navigation display.
+  setActiveTaskTitle(title: string | null): void {
+    this.activeTaskTitleState.set(title);
   }
 }

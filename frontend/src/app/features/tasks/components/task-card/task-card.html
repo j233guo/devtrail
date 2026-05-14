@@ -1,4 +1,12 @@
-<article class="task-card" [class.task-card--archived]="task().status === TaskStatus.Archived">
+<article
+  class="task-card"
+  [class.task-card--archived]="task().status === TaskStatus.Archived"
+  role="button"
+  tabindex="0"
+  (click)="openWorkspace()"
+  (keydown.enter)="openWorkspace()"
+  (keydown.space)="$event.preventDefault(); openWorkspace()"
+>
   <header>
     <div>
       <div class="task-badges">
@@ -15,7 +23,7 @@
       <h3>{{ task().title }}</h3>
     </div>
 
-    <app-dropdown-menu triggerLabel="Actions">
+    <app-dropdown-menu triggerLabel="Actions" (click)="$event.stopPropagation()">
       <button type="button" (click)="requestEdit()">Edit</button>
       @if (task().status === TaskStatus.Archived) {
         <button type="button" (click)="requestArchive()">Restore to Todo</button>

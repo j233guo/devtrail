@@ -1,6 +1,6 @@
 <header class="navbar">
-  @if (pageDisplay().showBackToProjects) {
-    <a class="navbar-back" routerLink="/projects" aria-label="Back to projects">←</a>
+  @if (pageDisplay().backLink) {
+    <a class="navbar-back" [routerLink]="pageDisplay().backLink" aria-label="Go back">←</a>
   }
 
   <div class="navbar-copy">
